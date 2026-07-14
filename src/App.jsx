@@ -1,18 +1,20 @@
+import Header from './components/ui/Header.jsx';
+import ComponentPreview from './ComponentPreview.jsx';
+
 export default function App() {
+  // Komponenten-Vorschau: /?preview=1 aufrufen
+  if (new URLSearchParams(window.location.search).get('preview') === '1') {
+    return <ComponentPreview />;
+  }
   return (
-    <main className="app">
-      <header className="app-header">
-        <img
-          src={`${import.meta.env.BASE_URL}assets/sv-schoening-logo.png`}
-          alt="Vereinslogo SV Schöning 1926 e.V."
-          className="app-logo"
-        />
-        <h1>SV Schöning Trainingsplaner</h1>
-      </header>
-      <p className="app-status">
-        Projektgerüst steht. Designsystem, Datenanbindung und Generator folgen
-        in den nächsten Phasen.
-      </p>
+    <main>
+      <Header subtitle="SV Schöning 1926 e.V." />
+      <div className="app">
+        <p className="app-status">
+          Designsystem steht. Datenanbindung und Generator folgen in den
+          nächsten Phasen.
+        </p>
+      </div>
     </main>
   );
 }

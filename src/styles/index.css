@@ -15,9 +15,14 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  color: var(--color-text);
-  background: var(--color-white);
+  font-family: var(--font-family);
+  color: var(--c-text);
+  background: var(--c-bg);
+  line-height: var(--lh-base);
+}
+
+h1, h2, h3, h4 {
+  color: var(--c-heading);
 }
 
 .app {

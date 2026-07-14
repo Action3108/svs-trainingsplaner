@@ -1,0 +1,75 @@
+/* ============================================
+   SV Schöning Trainingsplaner – Design Tokens
+   Verbindlich. Schwarz/Weiß dominieren, Orange
+   nur funktional (Ball, Hütchen, Warnung).
+   ============================================ */
+:root {
+  /* Farben – CI */
+  --c-black: #000000;        /* NUR Logo und Übungsgrafiken */
+  --c-anthracite: #383834;   /* Primärflächen und Überschriften */
+  --c-primary: var(--c-anthracite);
+  --c-text: #33332f;         /* Fließtext – weicher als Schwarz */
+  --c-heading: #1c1c1a;
+  --c-text-muted: #5d5d58;
+  --c-white: #ffffff;
+  --c-bg: #f5f5f3;           /* Seitenhintergrund */
+  --c-surface: #ffffff;      /* Karten und Panels */
+  --c-gray-light: #f5f5f3;
+  --c-gray-soft: #ecece9;    /* abgesetzte Flächen, Zebra, Hover */
+  --c-gray-mid: #a3a3a3;
+  --c-border: #d9d9d6;
+  --c-accent-ball: #f59e0b;
+  --c-accent-cone: #f97316;
+  --c-danger: #b91c1c;
+  --c-success: #166534;
+
+  /* Zustände */
+  --c-hover: #454540;
+  --c-active: #52524c;
+  --c-focus-ring: #f59e0b;
+  --c-disabled-bg: #e5e5e2;
+  --c-disabled-text: #a3a3a3;
+
+  /* Typografie */
+  --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fs-xs: 0.75rem;   /* 12px */
+  --fs-sm: 0.875rem;  /* 14px */
+  --fs-base: 1rem;    /* 16px – nie kleiner für Fließtext */
+  --fs-lg: 1.125rem;  /* 18px */
+  --fs-xl: 1.375rem;  /* 22px */
+  --fs-2xl: 1.75rem;  /* 28px */
+  --fw-normal: 400;
+  --fw-medium: 600;
+  --fw-bold: 800;
+  --lh-tight: 1.2;
+  --lh-base: 1.5;
+
+  /* Abstände (4er-Raster) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* Radien */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-full: 999px;
+
+  /* Schatten */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-raised: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-sheet: 0 -4px 20px rgba(0, 0, 0, 0.2);
+
+  /* Interaktion */
+  --touch-min: 44px;      /* Mindest-Touchfläche */
+  --focus-outline: 3px solid var(--c-focus-ring);
+
+  /* Layout */
+  --content-max: 640px;
+  --z-dialog: 100;
+  --z-sheet: 90;
+}

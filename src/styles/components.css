@@ -1,0 +1,211 @@
+/* ============================================
+   Basiskomponenten – mobile-first ab 320 px
+   ============================================ */
+
+/* ---- Header ---- */
+.svs-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-primary);
+  color: var(--c-white);
+}
+.svs-header__logo {
+  height: 40px;
+  width: auto;
+  background: var(--c-white);
+  border-radius: var(--r-sm);
+  padding: 2px;
+  flex-shrink: 0;
+}
+.svs-header__title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  margin: 0;
+}
+.svs-header__subtitle {
+  font-size: var(--fs-xs);
+  color: #c9c9c4;
+  margin: 0;
+}
+
+/* ---- Buttons ---- */
+.svs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-md);
+  border: 2px solid transparent;
+  font-family: inherit;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.svs-btn:focus-visible { outline: var(--focus-outline); outline-offset: 2px; }
+.svs-btn:disabled {
+  background: var(--c-disabled-bg);
+  color: var(--c-disabled-text);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+.svs-btn--primary { background: var(--c-primary); color: var(--c-white); }
+.svs-btn--primary:not(:disabled):hover { background: var(--c-hover); }
+.svs-btn--primary:not(:disabled):active { background: var(--c-active); }
+.svs-btn--secondary {
+  background: var(--c-surface);
+  color: var(--c-text);
+  border-color: var(--c-anthracite);
+}
+.svs-btn--secondary:not(:disabled):hover { background: var(--c-gray-soft); }
+.svs-btn--ghost { background: transparent; color: var(--c-text); }
+.svs-btn--ghost:not(:disabled):hover { background: var(--c-gray-soft); }
+.svs-btn--danger { background: var(--c-white); color: var(--c-danger); border-color: var(--c-danger); }
+.svs-btn--block { display: flex; width: 100%; }
+
+/* ---- Formularfelder ---- */
+.svs-field { display: flex; flex-direction: column; gap: var(--sp-1); margin-bottom: var(--sp-4); }
+.svs-field__label { font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--c-text); }
+.svs-field__hint { font-size: var(--fs-xs); color: var(--c-text-muted); }
+.svs-field__control {
+  min-height: var(--touch-min);
+  padding: var(--sp-2) var(--sp-3);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  color: var(--c-text);
+  background: var(--c-white);
+  border: 2px solid var(--c-border);
+  border-radius: var(--r-md);
+}
+.svs-field__control:focus-visible { outline: var(--focus-outline); outline-offset: 1px; border-color: var(--c-primary); }
+.svs-field__control[aria-invalid='true'] { border-color: var(--c-danger); }
+.svs-field__error { font-size: var(--fs-xs); color: var(--c-danger); }
+
+/* ---- Trainingskarte ---- */
+.svs-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--sp-4);
+  overflow: hidden;
+}
+.svs-card__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--touch-min);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  list-style: none;
+}
+.svs-card__summary::-webkit-details-marker { display: none; }
+.svs-card__summary:focus-visible { outline: var(--focus-outline); outline-offset: -3px; }
+.svs-card__summary:hover { background: var(--c-gray-soft); }
+.svs-card__phase {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--c-white);
+  background: var(--c-primary);
+  border-radius: var(--r-full);
+  padding: var(--sp-1) var(--sp-3);
+  white-space: nowrap;
+}
+.svs-card__title { flex: 1; font-size: var(--fs-base); font-weight: var(--fw-medium); margin: 0; }
+.svs-card__meta { font-size: var(--fs-sm); color: var(--c-text-muted); white-space: nowrap; }
+.svs-card__chevron { transition: transform 0.15s; flex-shrink: 0; }
+details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg); }
+.svs-card__body { padding: 0 var(--sp-4) var(--sp-4); border-top: 1px solid var(--c-border); }
+.svs-card__section-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  margin: var(--sp-4) 0 var(--sp-1);
+}
+
+/* ---- Dialog ---- */
+.svs-dialog {
+  border: none;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-raised);
+  padding: var(--sp-5);
+  max-width: min(92vw, 480px);
+  width: 100%;
+}
+.svs-dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+.svs-dialog__title { font-size: var(--fs-xl); font-weight: var(--fw-bold); margin: 0 0 var(--sp-3); }
+.svs-dialog__actions { display: flex; gap: var(--sp-3); justify-content: flex-end; margin-top: var(--sp-5); flex-wrap: wrap; }
+
+/* ---- Bottom Sheet ---- */
+.svs-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-sheet);
+}
+.svs-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sheet);
+  background: var(--c-white);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  box-shadow: var(--shadow-sheet);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+.svs-sheet__handle {
+  width: 40px;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--c-gray-mid);
+  margin: var(--sp-2) auto var(--sp-1);
+  flex-shrink: 0;
+}
+.svs-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-4);
+}
+.svs-sheet__title { font-size: var(--fs-lg); font-weight: var(--fw-bold); margin: 0; }
+.svs-sheet__body { overflow-y: auto; padding: 0 var(--sp-4) var(--sp-5); }
+@media (min-width: 768px) {
+  .svs-sheet {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 560px;
+    border-radius: var(--r-lg);
+    bottom: var(--sp-5);
+  }
+}
+
+/* ---- Hinweis/Warnung (Orange nur funktional) ---- */
+.svs-note {
+  display: flex;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 4px solid var(--c-accent-ball);
+  background: var(--c-gray-light);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+}
+
+/* ---- Druck ---- */
+@media print {
+  .svs-header { background: var(--c-white); color: var(--c-text); border-bottom: 2px solid var(--c-primary); }
+  .svs-btn, .svs-sheet, .svs-sheet-backdrop, .no-print { display: none !important; }
+  .svs-card { box-shadow: none; break-inside: avoid; }
+  details:not([open]) > .svs-card__body { display: block; }
+  body { font-size: 11pt; }
+}
