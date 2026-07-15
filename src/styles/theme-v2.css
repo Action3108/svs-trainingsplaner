@@ -1,0 +1,111 @@
+/* ============================================================
+   Designsystem V2 „Modern Coaching Workspace“
+   Aktivierung per data-theme="v2" auf einem .theme-scope-Container.
+   V1 bleibt unangetastet – beide Systeme sind vergleichbar (Preview).
+   Übungsdiagramme behalten ihren eigenen Style Guide (unverändert).
+   ============================================================ */
+
+.theme-scope {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-family);
+  min-height: 100%;
+}
+
+[data-theme='v2'] {
+  /* Farben */
+  --c-bg: #f4f7f5;
+  --c-surface: #ffffff;
+  --c-gray-soft: #eaf2ec;
+  --c-gray-light: #eaf2ec;
+  --c-primary: #163a2d;
+  --c-anthracite: #163a2d;
+  --c-hover: #0f2a20;
+  --c-active: #0f2a20;
+  --c-accent: #b7f36b;
+  --c-text: #101828;
+  --c-heading: #101828;
+  --c-text-muted: #475467;
+  --c-border: #d0d5dd;
+  --c-info: #2563eb;
+  --c-warn-bg: #fff4cc;
+  --c-warn-text: #7a4d00;
+  --c-danger: #b42318;
+  --c-success: #1a7f37;
+  --c-focus-ring: #163a2d;
+  --c-disabled-bg: #eaecef;
+  --c-disabled-text: #98a2b3;
+
+  /* Typografie */
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
+
+  /* Abstände: 4 / 8 / 12 / 16 / 24 / 32 / 48 (deckt sich mit --sp-1…--sp-7) */
+
+  /* Radien und Schatten */
+  --r-lg: 20px;   /* Karten */
+  --r-md: 14px;   /* Formulare, Buttons */
+  --r-sm: 10px;
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
+  --shadow-raised: 0 8px 24px rgba(16, 24, 40, 0.12);
+
+  /* Interaktion */
+  --touch-min: 48px;
+  --focus-outline: 3px solid var(--c-focus-ring);
+}
+
+/* Fokus in V2: Ring + Versatz (Form, nicht nur Farbe) */
+[data-theme='v2'] :focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--c-surface);
+}
+
+[data-theme='v2'] h1,
+[data-theme='v2'] h2,
+[data-theme='v2'] h3,
+[data-theme='v2'] h4 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Header: dunkelgrüne Fläche, Logo unverändert auf weißer Kachel */
+[data-theme='v2'] .svs-header {
+  background: var(--c-primary);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+[data-theme='v2'] .svs-header__title { color: #ffffff; }
+[data-theme='v2'] .svs-header__subtitle { color: #cfe3d8; }
+
+/* Primärbutton mit Akzent-Variante */
+[data-theme='v2'] .svs-btn--accent {
+  background: var(--c-accent);
+  color: var(--c-primary);
+  border-color: transparent;
+  font-weight: 600;
+}
+[data-theme='v2'] .svs-btn--accent:not(:disabled):hover { background: #a5e75a; }
+[data-theme='v2'] .svs-btn--accent:not(:disabled):active { background: #93d94a; }
+
+/* Übungsdiagramme im V2-Look: Grüntöne statt Grau/Schwarz.
+   Kontrast Linien auf Feld ≈ 10:1, Graustufen-Lesbarkeit bleibt erhalten. */
+[data-theme='v2'] {
+  --dia-field: #eaf2ec;
+  --dia-line: #163a2d;
+  --dia-team-dark: #163a2d;
+  --dia-neutral: #94a39b;
+}
+.svs-diagram__play {
+  min-height: 40px;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+@media (prefers-reduced-motion: reduce) {
+  .svs-diagram animateMotion { display: none; }
+}
+
+/* Karten: größerer Radius, weichere Schatten, Phase-Badge grün */
+[data-theme='v2'] .svs-card { border: 1px solid var(--c-border); }
+[data-theme='v2'] .svs-card__phase { background: var(--c-primary); }
+[data-theme='v2'] de

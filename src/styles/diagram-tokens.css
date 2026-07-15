@@ -1,0 +1,177 @@
+/* ============================================================
+   Diagramm-Tokens V3 – „Moderne Spielfeldkarte“
+   Zentrale Werte für Diagrammkarte, Feld, Spieler, Material,
+   Bewegungslinien und Legende. Gilt themenunabhängig.
+   ============================================================ */
+:root {
+  /* Karte */
+  --dgm-card-bg: #ffffff;
+  --dgm-card-radius: 18px;
+  --dgm-card-border: #d0d5dd;
+  --dgm-card-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+  --dgm-card-pad: 12px;
+  --dgm-max-width: 720px;
+
+  /* Spielfeld */
+  --dgm-field: #eaf6ec;
+  --dgm-field-alt: #ddf0e1;
+  --dgm-field-line: #a7c9af;
+
+  /* Spieler */
+  --dgm-team-a: #2563eb;   /* Team Blau (Daten: black) */
+  --dgm-team-b: #f04438;   /* Team Koralle (Daten: white) */
+  --dgm-neutral: #7f56d9;
+  --dgm-gk: #163a2d;
+  --dgm-coach: #101828;
+
+  /* Material */
+  --dgm-ball: #f59e0b;
+  --dgm-cone: #f97316;
+  --dgm-goal-line: #667085;
+  --dgm-zone: #b7f36b;
+  --dgm-zone-label: #3f621a;
+
+  /* Bewegungslinien */
+  --dgm-pass: #2563eb;
+  --dgm-run: #344054;
+  --dgm-dribble: #f59e0b;
+  --dgm-shot: #f04438;
+
+  /* Text und Fokus */
+  --dgm-title: #101828;
+  --dgm-muted: #475467;
+  --dgm-focus: #2563eb;
+}
+@media (min-width: 768px) {
+  :root { --dgm-card-pad: 16px; }
+}
+
+/* ---- Diagrammkarte ---- */
+.dgm-card {
+  background: var(--dgm-card-bg);
+  border: 1px solid var(--dgm-card-border);
+  border-radius: var(--dgm-card-radius);
+  box-shadow: var(--dgm-card-shadow);
+  padding: var(--dgm-card-pad);
+  max-width: var(--dgm-max-width);
+  margin: 0 0 var(--sp-4, 16px);
+}
+.dgm-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.dgm-card__titles { flex: 1; min-width: 0; }
+.dgm-card__title {
+  font-size: var(--fs-lg, 1.125rem);
+  color: var(--dgm-title);
+  margin: 0;
+}
+.dgm-card__type {
+  font-size: var(--fs-xs, 0.75rem);
+  color: var(--dgm-muted);
+  margin: 2px 0 0;
+}
+.dgm-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+.dgm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  min-height: 28px;
+  border-radius: 999px;
+  background: #f4f7f5;
+  border: 1px solid var(--dgm-card-border);
+  font-size: var(--fs-xs, 0.75rem);
+  color: var(--dgm-title);
+  white-space: nowrap;
+}
+.dgm-chip__swatch {
+  display: inline-block;
+  width: 22px;
+  height: 0;
+  border-bottom-width: 3px;
+}
+.dgm-chip__dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(16, 24, 40, 0.4);
+}
+.dgm-card__desc {
+  font-size: var(--fs-sm, 0.875rem);
+  color: var(--dgm-muted);
+  margin: 12px 0 0;
+  max-width: 65ch;
+}
+.dgm-card__fullscreen,
+.dgm-card__play {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--dgm-card-border);
+  background: var(--dgm-card-bg);
+  color: var(--dgm-title);
+  font-size: var(--fs-sm, 0.875rem);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.dgm-card__fullscreen:hover,
+.dgm-card__play:hover { background: #f4f7f5; }
+.dgm-card__fullscreen:focus-visible,
+.dgm-card__play:focus-visible,
+.dgm-card__legend summary:focus-visible {
+  outline: 3px solid var(--dgm-focus);
+  outline-offset: 2px;
+}
+.dgm-card__legend { margin-top: 12px; }
+.dgm-card__legend summary {
+  cursor: pointer;
+  font-size: var(--fs-sm, 0.875rem);
+  color: var(--dgm-muted);
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+.dgm-card__legend summary::-webkit-details-marker { display: none; }
+.dgm-card__legend summary::after { content: '▾'; transition: transform 0.15s; }
+.dgm-card__legend[open] summary::after { transform: rotate(180deg); }
+.dgm-card__legend-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* ---- SVG-Bühne ---- */
+.dgm-stage {
+  width: 100%;
+  min-height: 220px;
+  display: block;
+  height: auto;
+}
+.dgm-dialog {
+  border: none;
+  border-radius: var(--dgm-card-radius);
+  padding: var(--dgm-card-pad);
+  width: min(96vw, 1100px);
+  box-shadow: var(--dgm-card-shadow);
+}
+.dgm-dialog::backdrop { background: rgba(16, 24, 40, 0.55); }
+
+@media print {
+  .dgm-card { box-shadow: none; break-inside: avoid; }
+  .dgm-card__fullscreen, .dgm-card__play { display: none !important; }
+}

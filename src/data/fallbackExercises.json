@@ -1,0 +1,310 @@
+{
+  "settings": {
+    "appTitle": "SV Schöning Trainingsplaner",
+    "clubName": "SV Schöning 1926 e.V.",
+    "defaultDuration": "90",
+    "minPlayers": "4",
+    "maxPlayers": "30",
+    "maxSetupChanges": "1",
+    "showSources": "true",
+    "databaseVersion": "fallback"
+  },
+  "lists": {
+    "ageGroups": [
+      { "value": "G", "label": "G-Junioren", "sortOrder": 1 },
+      { "value": "F", "label": "F-Junioren", "sortOrder": 2 },
+      { "value": "E", "label": "E-Junioren", "sortOrder": 3 },
+      { "value": "D", "label": "D-Junioren", "sortOrder": 4 },
+      { "value": "C", "label": "C-Junioren", "sortOrder": 5 },
+      { "value": "B", "label": "B-Junioren", "sortOrder": 6 },
+      { "value": "A", "label": "A-Junioren", "sortOrder": 7 }
+    ],
+    "durations": [
+      { "value": "60", "label": "60 Minuten", "sortOrder": 1 },
+      { "value": "75", "label": "75 Minuten", "sortOrder": 2 },
+      { "value": "90", "label": "90 Minuten", "sortOrder": 3 }
+    ],
+    "focusAreas": [
+      { "value": "Ballgewöhnung", "label": "Ballgewöhnung", "sortOrder": 1 },
+      { "value": "Dribbling", "label": "Dribbling", "sortOrder": 2 },
+      { "value": "Passspiel", "label": "Passspiel", "sortOrder": 3 },
+      { "value": "Torschuss", "label": "Torschuss", "sortOrder": 4 },
+      { "value": "Umschalten", "label": "Umschalten", "sortOrder": 5 }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "FB-001",
+      "title": "Dribbelgarten",
+      "phase": "warmup_1",
+      "ageGroups": ["G", "F", "E"],
+      "focusAreas": ["Ballgewöhnung", "Dribbling"],
+      "minPlayers": 4,
+      "maxPlayers": 16,
+      "preferredPlayers": 10,
+      "goalkeepersRequired": 0,
+      "maxWaitingPlayers": 0,
+      "oddPlayerSolution": "kein Problem – jedes Kind hat einen Ball",
+      "durationMin": 8,
+      "durationMax": 12,
+      "intensity": "mittel",
+      "complexity": "einfach",
+      "fieldLength": 20,
+      "fieldWidth": 20,
+      "goals": "keine",
+      "equipment": ["1 Ball pro Kind", "10 Hütchen"],
+      "objective": "Viele Ballkontakte, enge Ballführung, Kopf heben.",
+      "setup": "20×20-m-Feld, Hütchen als Hindernisse verteilt. Jedes Kind mit Ball.",
+      "procedure": "Alle dribbeln frei durchs Feld und umkurven die Hütchen. Der Trainer ruft Aufgaben: Tempowechsel, Richtungswechsel, schwacher Fuß, Stopp mit der Sohle.",
+      "coachingPoints": "Ball eng am Fuß · Blick vom Ball lösen · beide Füße nutzen",
+      "regression": "Feld vergrößern, weniger Hütchen.",
+      "progression": "Feld verkleinern, Aufgaben kombinieren.",
+      "diagramId": "FB-DIA-001",
+      "diagram": {
+        "diagramId": "FB-DIA-001",
+        "data": {
+          "field": { "w": 100, "h": 100 },
+          "cones": [{ "x": 20, "y": 25 }, { "x": 40, "y": 60 }, { "x": 55, "y": 20 }, { "x": 70, "y": 70 }, { "x": 30, "y": 80 }, { "x": 80, "y": 40 }],
+          "players": [
+            { "team": "black", "n": 1, "x": 10, "y": 15 }, { "team": "black", "n": 2, "x": 30, "y": 45 },
+            { "team": "black", "n": 3, "x": 60, "y": 35 }, { "team": "black", "n": 4, "x": 75, "y": 60 },
+            { "team": "black", "n": 5, "x": 45, "y": 75 }, { "team": "black", "n": 6, "x": 85, "y": 20 }
+          ],
+          "balls": [{ "x": 12, "y": 17 }, { "x": 32, "y": 47 }, { "x": 62, "y": 37 }, { "x": 77, "y": 62 }, { "x": 47, "y": 77 }, { "x": 87, "y": 22 }],
+          "arrows": [
+            { "type": "dribble", "from": { "x": 10, "y": 15 }, "to": { "x": 25, "y": 35 } },
+            { "type": "dribble", "from": { "x": 60, "y": 35 }, "to": { "x": 50, "y": 55 } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "FB-002",
+      "title": "Passquadrat",
+      "phase": "warmup_2",
+      "ageGroups": ["E", "D", "C"],
+      "focusAreas": ["Passspiel"],
+      "minPlayers": 4,
+      "maxPlayers": 16,
+      "preferredPlayers": 8,
+      "goalkeepersRequired": 0,
+      "maxWaitingPlayers": 2,
+      "oddPlayerSolution": "an einer Ecke stehen zwei Spieler",
+      "durationMin": 10,
+      "durationMax": 15,
+      "intensity": "mittel",
+      "complexity": "einfach",
+      "fieldLength": 12,
+      "fieldWidth": 12,
+      "goals": "keine",
+      "equipment": ["1 Ball", "4 Hütchen"],
+      "objective": "Präzises Passspiel und Nachlaufen, erster Kontakt in Bewegungsrichtung.",
+      "setup": "Quadrat 12×12 m, an jeder Ecke ein Hütchen, ein Spieler je Ecke.",
+      "procedure": "Pass zur nächsten Ecke, dem Ball folgen und die neue Position übernehmen. Nach einigen Runden Richtungswechsel.",
+      "coachingPoints": "Scharfer Pass auf den hinteren Fuß · sofort nachlaufen · Anschlussposition offen anlaufen",
+      "regression": "Ball zunächst mitnehmen und erst dann passen.",
+      "progression": "Zweiter Ball, direktes Spiel, Tempo erhöhen.",
+      "diagramId": "FB-DIA-002",
+      "diagram": {
+        "diagramId": "FB-DIA-002",
+        "data": {
+          "field": { "w": 100, "h": 100 },
+          "cones": [{ "x": 20, "y": 20 }, { "x": 80, "y": 20 }, { "x": 80, "y": 80 }, { "x": 20, "y": 80 }],
+          "players": [
+            { "team": "black", "n": 1, "x": 20, "y": 20 }, { "team": "black", "n": 2, "x": 80, "y": 20 },
+            { "team": "black", "n": 3, "x": 80, "y": 80 }, { "team": "black", "n": 4, "x": 20, "y": 80 }
+          ],
+          "balls": [{ "x": 23, "y": 23 }],
+          "arrows": [
+            { "type": "pass", "from": { "x": 20, "y": 20 }, "to": { "x": 80, "y": 20 } },
+            { "type": "run", "from": { "x": 20, "y": 24 }, "to": { "x": 76, "y": 26 } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "FB-003",
+      "title": "3 gegen 3 auf vier Minitore",
+      "phase": "game_form_1",
+      "ageGroups": ["F", "E", "D"],
+      "focusAreas": ["Umschalten", "Passspiel"],
+      "minPlayers": 6,
+      "maxPlayers": 12,
+      "preferredPlayers": 6,
+      "goalkeepersRequired": 0,
+      "maxWaitingPlayers": 0,
+      "oddPlayerSolution": "ein neutraler Spieler spielt immer mit dem ballbesitzenden Team",
+      "durationMin": 12,
+      "durationMax": 18,
+      "intensity": "hoch",
+      "complexity": "mittel",
+      "fieldLength": 25,
+      "fieldWidth": 20,
+      "goals": "4 Minitore",
+      "equipment": ["1 Ball", "4 Minitore", "Leibchen"],
+      "objective": "Schnelles Umschalten nach Ballgewinn und -verlust, Breite im Spiel.",
+      "setup": "Feld 25×20 m, je zwei Minitore auf den Grundlinien. Zwei Dreierteams, bei ungerader Zahl ein neutraler Spieler.",
+      "procedure": "Freies Spiel auf je zwei Minitore. Nach Ballgewinn sofort in die Tiefe spielen, nach Ballverlust sofort pressen.",
+      "coachingPoints": "Blick hoch nach Ballgewinn · beide Tore nutzen · sofort umschalten",
+      "regression": "Nur ein Torabschluss nach mindestens drei Pässen.",
+      "progression": "Kontaktbegrenzung, Zeitlimit für den Abschluss.",
+      "diagramId": "FB-DIA-003",
+      "diagram": {
+        "diagramId": "FB-DIA-003",
+        "data": {
+          "field": { "w": 100, "h": 100 },
+          "goals": [
+            { "type": "mini", "x": 0, "y": 25 }, { "type": "mini", "x": 0, "y": 75 },
+            { "type": "mini", "x": 100, "y": 25 }, { "type": "mini", "x": 100, "y": 75 }
+          ],
+          "players": [
+            { "team": "black", "n": 1, "x": 30, "y": 30 }, { "team": "black", "n": 2, "x": 35, "y": 60 }, { "team": "black", "n": 3, "x": 20, "y": 50 },
+            { "team": "white", "n": 1, "x": 60, "y": 35 }, { "team": "white", "n": 2, "x": 68, "y": 62 }, { "team": "white", "n": 3, "x": 75, "y": 45 },
+            { "team": "neutral", "n": 0, "x": 50, "y": 8 }
+          ],
+          "balls": [{ "x": 37, "y": 58 }],
+          "arrows": [
+            { "type": "pass", "from": { "x": 35, "y": 60 }, "to": { "x": 55, "y": 70 } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "FB-004",
+      "title": "Andribbeln und Torschuss",
+      "phase": "exercise",
+      "ageGroups": ["F", "E", "D"],
+      "focusAreas": ["Torschuss", "Dribbling"],
+      "minPlayers": 4,
+      "maxPlayers": 16,
+      "preferredPlayers": 10,
+      "goalkeepersRequired": 1,
+      "maxWaitingPlayers": 4,
+      "oddPlayerSolution": "Startgruppen ungleich groß besetzen",
+      "durationMin": 12,
+      "durationMax": 18,
+      "intensity": "hoch",
+      "complexity": "einfach",
+      "fieldLength": 25,
+      "fieldWidth": 20,
+      "goals": "1 Jugendtor",
+      "equipment": ["viele Bälle", "3 Starthütchen", "1 Jugendtor"],
+      "objective": "Mutiges Andribbeln und Abschluss aus dem Dribbling.",
+      "setup": "Drei Starthütchen mit Bällen, Schusslinie bei ca. 12 m, Jugendtor mit Torwart.",
+      "procedure": "Auf Trainerruf dribbelt der erste Spieler an und schließt spätestens an der Schusslinie ab. Danach zurück zur nächsten Gruppe.",
+      "coachingPoints": "Letzter Kontakt vor dem Schuss lang genug · Spannstoß · Blick zum Tor",
+      "regression": "Ohne Torwart, kürzere Distanz.",
+      "progression": "Verteidiger läuft von hinten ein, Zeitdruck.",
+      "diagramId": "FB-DIA-004",
+      "diagram": {
+        "diagramId": "FB-DIA-004",
+        "data": {
+          "field": { "w": 100, "h": 100 },
+          "goals": [{ "type": "youth", "x": 100, "y": 50 }],
+          "cones": [{ "x": 15, "y": 25 }, { "x": 15, "y": 50 }, { "x": 15, "y": 75 }],
+          "lines": [{ "from": { "x": 60, "y": 15 }, "to": { "x": 60, "y": 85 }, "style": "dashed", "label": "Schusslinie" }],
+          "players": [
+            { "team": "black", "n": 1, "x": 11, "y": 25 }, { "team": "black", "n": 2, "x": 11, "y": 50 },
+            { "team": "black", "n": 3, "x": 11, "y": 75 }, { "team": "gk", "n": 0, "x": 95, "y": 50 }
+          ],
+          "balls": [{ "x": 14, "y": 27 }],
+          "arrows": [
+            { "type": "dribble", "from": { "x": 15, "y": 25 }, "to": { "x": 55, "y": 40 } },
+            { "type": "shot", "from": { "x": 58, "y": 42 }, "to": { "x": 96, "y": 55 } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "FB-005",
+      "title": "3 gegen 3 mit Zielzone",
+      "phase": "game_form_2",
+      "ageGroups": ["E", "D", "C"],
+      "focusAreas": ["Umschalten", "Dribbling"],
+      "minPlayers": 6,
+      "maxPlayers": 12,
+      "preferredPlayers": 7,
+      "goalkeepersRequired": 0,
+      "maxWaitingPlayers": 0,
+      "oddPlayerSolution": "ein neutraler Spieler spielt mit dem ballbesitzenden Team",
+      "durationMin": 12,
+      "durationMax": 18,
+      "intensity": "hoch",
+      "complexity": "mittel",
+      "fieldLength": 25,
+      "fieldWidth": 20,
+      "goals": "Zielzone statt Tor",
+      "equipment": ["1 Ball", "Hütchen für die Zonen", "Leibchen"],
+      "objective": "Ball sicher in die Zielzone dribbeln oder passen, Gegenpressing nach Verlust.",
+      "setup": "Feld 25×20 m mit markierter Zielzone am Ende. Zwei Dreierteams, optional ein Neutraler.",
+      "procedure": "Punkt, wenn der Ball kontrolliert in der Zielzone gestoppt wird. Danach greift das andere Team in die Gegenrichtung an.",
+      "coachingPoints": "Tempo ins freie Feld · Zone kontrolliert bespielen · nach Verlust sofort nachsetzen",
+      "regression": "Zielzone vergrößern.",
+      "progression": "Zeitlimit pro Angriff, Kontaktbegrenzung.",
+      "diagramId": "FB-DIA-005",
+      "diagram": {
+        "diagramId": "FB-DIA-005",
+        "data": {
+          "field": { "w": 100, "h": 100 },
+          "zones": [{ "x": 80, "y": 0, "w": 20, "h": 100, "label": "Zielzone" }],
+          "players": [
+            { "team": "black", "n": 1, "x": 30, "y": 30 }, { "team": "black", "n": 2, "x": 35, "y": 60 }, { "team": "black", "n": 3, "x": 20, "y": 50 },
+            { "team": "white", "n": 1, "x": 60, "y": 35 }, { "team": "white", "n": 2, "x": 68, "y": 62 }, { "team": "white", "n": 3, "x": 75, "y": 45 }
+          ],
+          "balls": [{ "x": 37, "y": 58 }],
+          "arrows": [
+            { "type": "pass", "from": { "x": 35, "y": 60 }, "to": { "x": 55, "y": 70 } },
+            { "type": "dribble", "from": { "x": 60, "y": 70 }, "to": { "x": 85, "y": 74 } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "FB-006",
+      "title": "Abschlussspiel auf zwei Tore",
+      "phase": "final_game",
+      "ageGroups": ["G", "F", "E", "D", "C", "B", "A"],
+      "focusAreas": ["Umschalten", "Passspiel", "Torschuss"],
+      "minPlayers": 6,
+      "maxPlayers": 20,
+      "preferredPlayers": 12,
+      "goalkeepersRequired": 2,
+      "maxWaitingPlayers": 0,
+      "oddPlayerSolution": "ein Team spielt mit einem Spieler mehr, Wechsel nach jedem Tor",
+      "durationMin": 15,
+      "durationMax": 25,
+      "intensity": "hoch",
+      "complexity": "einfach",
+      "fieldLength": 40,
+      "fieldWidth": 30,
+      "goals": "2 Jugendtore",
+      "equipment": ["1 Ball", "2 Jugendtore", "Leibchen"],
+      "objective": "Freies Spiel, Gelerntes anwenden, hohe Nettospielzeit.",
+      "setup": "Feld 40×30 m, zwei Jugendtore mit Torhütern, zwei gleich starke Teams.",
+      "procedure": "Freies Spiel. Der Trainer coacht ausschließlich den Schwerpunkt der Einheit und lässt das Spiel laufen.",
+      "coachingPoints": "Nur Schwerpunkt coachen · viele Ballaktionen zulassen · Spiel laufen lassen",
+      "regression": "Feld verkleinern, weniger Spieler je Team.",
+      "progression": "Provokationsregel passend zum Schwerpunkt.",
+      "diagramId": "FB-DIA-006",
+      "diagram": {
+        "diagramId": "FB-DIA-006",
+        "data": {
+          "field": { "w": 100, "h": 100 },
+          "goals": [{ "type": "youth", "x": 0, "y": 50 }, { "type": "youth", "x": 100, "y": 50 }],
+          "players": [
+            { "team": "gk", "n": 0, "x": 5, "y": 50 },
+            { "team": "black", "n": 1, "x": 25, "y": 30 }, { "team": "black", "n": 2, "x": 25, "y": 70 }, { "team": "black", "n": 3, "x": 40, "y": 50 },
+            { "team": "white", "n": 1, "x": 60, "y": 35 }, { "team": "white", "n": 2, "x": 60, "y": 65 }, { "team": "white", "n": 3, "x": 75, "y": 50 },
+            { "team": "gk", "n": 0, "x": 95, "y": 50 }
+          ],
+          "balls": [{ "x": 42, "y": 52 }],
+          "arrows": [
+            { "type": "pass", "from": { "x": 40, "y": 50 }, "to": { "x": 25, "y": 70 } }
+          ]
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "counts": { "exercisesPublished": 6, "exercisesTotal": 6, "diagramsPublished": 6, "errors": 0 }
+}

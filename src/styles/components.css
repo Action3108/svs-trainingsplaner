@@ -190,7 +190,8 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   }
 }
 
-/* ---- Hinweis/Warnung (Orange nur funktional) ---- */
+/* ---- Hinweis-, Info-, Fehler- und Erfolgskarten ----
+   Icon + Balken tragen die Bedeutung, nicht nur die Farbe. */
 .svs-note {
   display: flex;
   gap: var(--sp-2);
@@ -200,12 +201,161 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   border-radius: var(--r-sm);
   font-size: var(--fs-sm);
 }
+.svs-note::before { font-weight: 800; flex-shrink: 0; }
+.svs-note--info {
+  border-left-color: var(--c-info, #2563eb);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-info, #2563eb);
+}
+.svs-note--info::before { content: 'ℹ'; color: var(--c-info, #2563eb); }
+.svs-note--warn {
+  border-left-color: var(--c-warn-text, #7a4d00);
+  background: var(--c-warn-bg, #fff4cc);
+  color: var(--c-warn-text, #7a4d00);
+}
+.svs-note--warn::before { content: '⚠'; }
+.svs-note--error {
+  border-left-color: var(--c-danger);
+  background: var(--c-surface);
+  border: 1px solid var(--c-danger);
+  border-left: 4px solid var(--c-danger);
+  color: var(--c-danger);
+}
+.svs-note--error::before { content: '✕'; }
+.svs-note--success {
+  border-left-color: var(--c-success);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-success);
+  color: var(--c-success);
+}
+.svs-note--success::before { content: '✓'; }
 
-/* ---- Druck ---- */
+/* ---- Auswahl-Chips ---- */
+.svs-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-height: var(--touch-min);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--c-border);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.svs-chip:hover:not(:disabled) { background: var(--c-gray-soft); }
+.svs-chip:focus-visible { outline: var(--focus-outline); outline-offset: 2px; }
+.svs-chip[aria-pressed='true'] {
+  background: var(--c-primary);
+  color: var(--c-white);
+  border-color: var(--c-primary);
+}
+.svs-chip[aria-pressed='true']::before { content: '✓ '; font-weight: 800; }
+.svs-chip:disabled {
+  background: var(--c-disabled-bg);
+  color: var(--c-disabled-text);
+  cursor: not-allowed;
+}
+
+/* ---- Spielerzahl-Stepper ---- */
+.svs-stepper { margin-bottom: var(--sp-4); }
+.svs-stepper__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.svs-stepper__value {
+  flex: 1;
+  text-align: center;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+.svs-stepper__btn {
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--c-border);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.svs-stepper__btn:hover:not(:disabled) { background: var(--c-gray-soft); }
+.svs-stepper__btn:focus-visible { outline: var(--focus-outline); outline-offset: 2px; }
+.svs-stepper__btn:active:not(:disabled) { background: var(--c-border); }
+.svs-stepper__btn:disabled { background: var(--c-disabled-bg); color: var(--c-disabled-text); cursor: not-allowed; }
+.svs-stepper__range {
+  width: 100%;
+  margin-top: var(--sp-3);
+  accent-color: var(--c-primary);
+  min-height: 24px;
+}
+
+/* ---- Button-Zusatzzustände ---- */
+.svs-btn--loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+.svs-btn--loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2.5px solid var(--c-gray-mid);
+  border-top-color: var(--c-white);
+  animation: svs-spin 0.7s linear infinite;
+}
+@keyframes svs-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .svs-btn--loading::after { animation-duration: 1.6s; }
+}
+
+/* ---- Trainingsformular & Plan ---- */
+.svs-form {
+  display: grid;
+  gap: var(--sp-4, 16px);
+  margin: var(--sp-4, 16px) 0 var(--sp-6, 24px);
+  max-width: 560px;
+}
+.svs-plan {
+  display: grid;
+  gap: var(--sp-3, 12px);
+  margin-top: var(--sp-5, 20px);
+}
+.svs-plan__error-details {
+  font-size: var(--fs-sm, 0.875rem);
+  color: var(--c-text-muted, #667085);
+}
+.svs-card__source {
+  font-size: var(--fs-sm, 0.875rem);
+  color: var(--c-text-muted, #667085);
+  margin-top: var(--sp-3, 12px);
+}
+
+/* ---- Druck: nur die PDF-Ansicht (PrintView) wird ausgegeben ---- */
+.svs-print { display: none; }
 @media print {
-  .svs-header { background: var(--c-white); color: var(--c-text); border-bottom: 2px solid var(--c-primary); }
+  .svs-header, .theme-scope .app { display: none !important; }
   .svs-btn, .svs-sheet, .svs-sheet-backdrop, .no-print { display: none !important; }
-  .svs-card { box-shadow: none; break-inside: avoid; }
-  details:not([open]) > .svs-card__body { display: block; }
+  .svs-print { display: block !important; color: #000; }
+  .svs-print__head { display: flex; gap: 12px; align-items: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; }
+  .svs-print__head img { width: 58px; height: auto; }
+  .svs-print__head h1 { font-size: 16pt; margin: 0; }
+  .svs-print__head p { margin: 0; font-size: 10pt; }
+  .svs-print__meta { font-size: 12pt; margin: 6px 0; }
+  .svs-print__phase { break-inside: avoid; border-top: 1px solid #999; padding-top: 8px; margin-top: 10px; }
+  .svs-print__phase h2 { font-size: 13pt; margin: 0 0 6px; }
+  .svs-print__diagram { max-width: 400px; margin-bottom: 6px; }
+  .svs-print p { margin: 2px 0; font-size: 10.5pt; }
   body { font-size: 11pt; }
 }
