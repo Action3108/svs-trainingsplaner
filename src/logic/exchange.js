@@ -4,6 +4,7 @@ import {
   organize,
   countRebuilds,
   fieldKey,
+  sizeClass,
 } from './generator.js';
 
 /**
@@ -25,9 +26,9 @@ export function findAlternatives(db, plan, phaseIndex, inputs, limit = 5) {
   if (!slot) return [];
   const usedIds = new Set(plan.phases.map((p) => p.exercise.id));
   const currentCoversFocus = slot.exercise.focusAreas.includes(inputs.focus);
-  const neighborFields = [plan.phases[phaseIndex - 1], plan.phases[phaseIndex + 1]]
-    .filter(Boolean)
-    .map((p) => fieldKey(p.exercise));
+  const neighbors = [plan.phases[phaseIndex - 1], plan.phases[phaseIndex + 1]].filter(Boolean);
+  const neighborFields = neighbors.map((p) => fieldKey(p.exercise));
+  const neighborClasses = neighbors.map((p) => sizeClass(p.exercise));
 
   const candidates = [];
   (db?.exercises ?? []).forEach((e) => {
@@ -39,11 +40,16 @@ export function findAlternatives(db, plan, phaseIndex, inputs, limit = 5) {
     // Zeitfenster: Alternative muss die eingeplante Dauer tragen können
     if (slot.duration < e.durationMin || slot.duration > e.durationMax) return;
 
+    // Feldkompatibilität: identisches Feld ist am besten, gleiche
+    // Größenklasse (nur kleine Anpassung) immer noch deutlich besser
+    // als ein wesentlicher Umbau.
     const sameField = neighborFields.includes(fieldKey(e));
+    const sameClass = neighborClasses.includes(sizeClass(e));
     candidates.push({
       exercise: e,
       sameField,
-      score: scoreExercise(e, inputs) + (sameField ? 0.15 : 0),
+      sameClass,
+      score: scoreExercise(e, inputs) + (sameField ? 0.15 : sameClass ? 0.08 : 0),
     });
   });
 
@@ -58,12 +64,14 @@ export function applyExchange(plan, phaseIndex, newExercise, players) {
       : p
   );
   const list = phases.map((p) => p.exercise);
-  const { rebuilds, changes } = countRebuilds(list);
+  const { rebuilds, changes, adjustments, adjustmentChanges } = countRebuilds(list);
   return {
     ...plan,
     phases,
     rebuilds,
     rebuildChanges: changes,
+    adjustments,
+    adjustmentChanges,
     equipment: [...new Set(list.flatMap((e) => e.equipment ?? []))],
   };
 }

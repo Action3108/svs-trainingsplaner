@@ -23,3 +23,13 @@ Projekt: SV Schöning Trainingsplaner · Verein: SV Schöning 1926 e.V.
 12. Vor jeder Aufgabe die Obsidian-Projektnotizen (Projekte/SVS Trainingsplaner) auf Entscheidungen und offene Punkte prüfen; danach aktualisieren.
 13. Jede Phase mit Ziel/Risiken/Abnahmekriterien beginnen, nur freigegebene Phasen implementieren, nach jeder Phase testen und dokumentieren.
 14. Nichts ohne ausdrückliche Freigabe veröffentlichen.
+
+## Update 2026-07-16 (Backlog-Paket)
+- Übungsdatenbank zusammengeführt: 98 Übungen/Diagramme (EX-001–EX-098), Import-Paket in `../../sheet-import-2026-07-16/` – das Google Sheet bleibt die einzige führende Quelle.
+- Nur noch 6 Trainingsschwerpunkte (seit 2026-07-17; vorher 8) (`ALLOWED_FOCUS_AREAS` in src/logic/sheetSchema.js); alte Werte werden beim Einlesen gemappt.
+- Generator kennt Strukturen: `standard` (6 Phasen) sowie `kurz_a`/`kurz_b` (3 Phasen) für G/F oder 60 min; Zeitverteilung 25/33/42 %.
+- 3v3-/4v4-Teamrotation: `detectBaseFormat`/`rotationPlan` in src/logic/generator.js (max. 4 Teams, Joker-Regel).
+- Kontrollmodus (QA): Route `?review=1`, Flag `REVIEW_MODE_ENABLED` in src/config.js, Doku in docs/kontrollmodus.md. Deaktivieren löscht keine Prüfdaten.
+- Sichtbar kein „Entwurf" mehr; Übungs-IDs werden überall angezeigt; „Team Rot" statt „Team Koralle".
+- Skripte: `node scripts/check-data.mjs <csv-ordner>` (Datenqualität), `node scripts/mass-test.mjs <csv-ordner>` (100-Einheiten-Großtest, Seed 42).
+- Feldkompatibilität (2026-07-17): Größenklassen S (≤20 m) / M (21–32) / L (33–45) / XL (≥46) in src/logic/generator.js (`sizeClass`). Wesentlicher Umbau = Klassenwechsel; Vorlagen-/Maßwechsel in gleicher Klasse = „kleine Anpassung" (Umbauampel + PDF zeigen beides, Generator bestraft Anpassungen leicht mit 0,02).

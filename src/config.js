@@ -47,5 +47,17 @@ export function csvUrlFor(tab) {
 /** localStorage-Schlüssel für die letzte gültige Datenbank-Kopie. */
 export const CACHE_KEY = 'svs-trainingsplaner-db-v1';
 
+/**
+ * Temporärer Kontrollmodus für die Übungsprüfung (Backlog §10).
+ * Aufruf nur über die nicht verlinkte interne Route ?review=1.
+ * Nach Abschluss der manuellen Prüfung und Umsetzung der freigegebenen
+ * Korrekturen wird der Modus auf Bestätigung von André auf `false` gesetzt –
+ * gespeicherte Prüfdaten (localStorage) bleiben dabei erhalten.
+ */
+export const REVIEW_MODE_ENABLED = true;
+
+/** localStorage-Schlüssel für den Prüfdatensatz des Kontrollmodus. */
+export const REVIEW_STORAGE_KEY = 'svs-trainingsplaner-review-v1';
+
 /** Zeitlimit pro Tab-Abruf in Millisekunden. */
 export const FETCH_TIMEOUT_MS = 10000;

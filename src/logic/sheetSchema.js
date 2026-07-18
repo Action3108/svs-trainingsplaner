@@ -19,6 +19,60 @@ export const PHASES = [
 export const AGE_GROUPS = ['G', 'F', 'E', 'D', 'C', 'B', 'A'];
 
 /**
+ * Die sechs erlaubten Trainingsschwerpunkte (Folge-Backlog 2026-07-17, §3).
+ * Interne Werte – die UI-Labels kommen aus dem Lists-Tab.
+ */
+export const ALLOWED_FOCUS_AREAS = [
+  'Dribbling',
+  'Passspiel',
+  'Ballan- und -mitnahme',
+  '1 gegen 1',
+  'Umschalten',
+  'Freilaufen und Anbieten',
+];
+
+/** Normalisierung alter Schwerpunktwerte (auch für Cache-/Fallback-Daten). */
+export const FOCUS_AREA_MAP = {
+  'Ballgewöhnung': 'Dribbling',
+  '1 gegen 1 offensiv': '1 gegen 1',
+  '1 gegen 1 defensiv': '1 gegen 1',
+  Fintieren: 'Dribbling',
+  Torschuss: '1 gegen 1',
+  'Überzahl/Unterzahl': 'Freilaufen und Anbieten',
+  Spielaufbau: 'Passspiel',
+  Pressing: 'Umschalten',
+  Verteidigen: '1 gegen 1',
+  Kombinationen: 'Passspiel',
+  Kopfball: 'Ballan- und -mitnahme',
+  Koordination: 'Dribbling',
+  'Schnelligkeit mit Ball': 'Dribbling',
+};
+
+/** Mappt Schwerpunkte auf die 8 erlaubten Werte und entfernt doppelte Tags. */
+export function normalizeFocusAreas(list) {
+  const out = [];
+  (list ?? []).forEach((raw) => {
+    const mapped = FOCUS_AREA_MAP[raw] ?? raw;
+    if (ALLOWED_FOCUS_AREAS.includes(mapped) && !out.includes(mapped)) out.push(mapped);
+  });
+  return out;
+}
+
+/**
+ * Entfernt das sichtbare Wort „ENTWURF“ aus Titeln und Texten.
+ * Interne Statuswerte (draft/review/published) bleiben unberührt.
+ */
+export function stripDraftLabel(text) {
+  return String(text ?? '')
+    .replace(/entwurf:\s*/gi, '')
+    .replace(/\s*\(entwurf[^)]*\)/gi, '')
+    .replace(/entwurf\s*[–-]\s*/gi, '')
+    .replace(/entwurf/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
  * Kanonische Spaltenreihenfolge je Tab (Datenmodell, Anleitung §8).
  * Wird verwendet, weil die gviz-Query-Engine Spaltenköpfe teils durch
  * Zellwerte ersetzt (beobachtet: „status“ → „published“). Stimmt die
@@ -77,8 +131,8 @@ export function validateExerciseRow(row) {
   if (ageGroups.length === 0 || ageGroups.some((a) => !AGE_GROUPS.includes(a))) {
     errors.push(`ageGroups ungültig (${row?.ageGroups})`);
   }
-  const focusAreas = splitList(row?.focusAreas);
-  if (focusAreas.length === 0) errors.push('focusAreas fehlt');
+  const focusAreas = normalizeFocusAreas(splitList(row?.focusAreas));
+  if (focusAreas.length === 0) errors.push('focusAreas fehlt oder nur unbekannte Werte');
 
   const minPlayers = toInt(row?.minPlayers);
   const maxPlayers = toInt(row?.maxPlayers);
@@ -105,6 +159,9 @@ export function validateExerciseRow(row) {
     exercise: {
       ...row,
       id,
+      title: stripDraftLabel(row?.title),
+      sourceTitle: stripDraftLabel(row?.sourceTitle),
+      adaptationNote: stripDraftLabel(row?.adaptationNote),
       ageGroups,
       focusAreas,
       equipment: splitList(row?.equipment),
@@ -148,6 +205,8 @@ export function validateDiagramRow(row) {
     diagram: {
       ...row,
       diagramId,
+      diagramCaption: stripDraftLabel(row?.diagramCaption),
+      diagramAltText: stripDraftLabel(row?.diagramAltText),
       data: check.data,
     },
   };
@@ -171,6 +230,19 @@ export function buildLists(rows) {
     });
   });
   Object.values(lists).forEach((l) => l.sort((a, b) => a.sortOrder - b.sortOrder));
+
+  // Nur die acht erlaubten Schwerpunkte anbieten (auch bei alten Cache-Daten):
+  // alte Werte werden gemappt, Duplikate entfernt, Reihenfolge bleibt stabil.
+  if (lists.focusAreas) {
+    const seen = new Set();
+    lists.focusAreas = lists.focusAreas
+      .map((f) => ({ ...f, value: FOCUS_AREA_MAP[f.value] ?? f.value }))
+      .filter((f) => {
+        if (!ALLOWED_FOCUS_AREAS.includes(f.value) || seen.has(f.value)) return false;
+        seen.add(f.value);
+        return true;
+      });
+  }
   return { lists, errors };
 }
 

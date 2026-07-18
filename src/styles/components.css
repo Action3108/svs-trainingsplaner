@@ -359,3 +359,147 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   .svs-print p { margin: 2px 0; font-size: 10.5pt; }
   body { font-size: 11pt; }
 }
+
+/* ---- Übungs-ID in Kartentiteln (eindeutige Identifikation, Backlog §4) ---- */
+.svs-card__id {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--c-text-muted, #667085);
+  letter-spacing: 0.02em;
+}
+
+/* ---- Informationskarten im Zwei-Spalten-Raster (Backlog §12) ---- */
+.svs-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3, 12px);
+  align-items: start;
+  margin: var(--sp-3, 12px) 0;
+}
+.svs-info {
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: var(--radius-md, 10px);
+  background: var(--c-surface, #fff);
+  padding: var(--sp-3, 12px);
+  min-width: 0;
+}
+.svs-info__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: var(--fs-sm, 0.875rem);
+  font-weight: 700;
+}
+.svs-info__icon { display: inline-flex; flex: none; }
+.svs-info__icon svg { width: 18px; height: 18px; display: block; }
+.svs-info__text {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--fs-sm, 0.875rem);
+  line-height: 1.5;
+}
+/* Nur sehr schmale Displays brechen einspaltig um – Inhalte bleiben
+   vollständig lesbar, kein horizontales Scrollen. */
+@media (max-width: 359px) {
+  .svs-info-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  .svs-info-grid { display: block; }
+}
+
+/* ---- Kontrollmodus (interner Prüfmodus) ---- */
+.svs-review-finding {
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: var(--radius-md, 10px);
+  padding: var(--sp-3, 12px);
+  margin: var(--sp-3, 12px) 0;
+}
+.svs-review-finding legend {
+  font-weight: 700;
+  font-size: var(--fs-sm, 0.875rem);
+  padding: 0 4px;
+}
+.svs-review-finding textarea.svs-field__control {
+  min-height: 0;
+  height: auto;
+  resize: vertical;
+}
+
+/* ---- Einheit im Überblick (kompakte Zusammenfassung, Folge-Backlog §2) ---- */
+.svs-overview {
+  list-style: none;
+  margin: var(--sp-3, 12px) 0;
+  padding: var(--sp-3, 12px);
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: var(--radius-md, 10px);
+  background: var(--c-surface, #fff);
+}
+.svs-overview li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 4px 0;
+  font-size: var(--fs-sm, 0.875rem);
+}
+.svs-overview li + li { border-top: 1px dashed var(--c-border, #e4e7ec); }
+.svs-overview__time {
+  flex: none;
+  min-width: 52px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.svs-overview__text { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---- Umbau-Hinweis zwischen zwei Übungen (2026-07-18) ---- */
+.svs-rebuild-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2, 8px);
+  margin: 0;
+  padding: var(--sp-1, 4px) var(--sp-3, 12px);
+  font-size: var(--fs-sm, 0.875rem);
+  color: var(--c-warn-text, #7a4d00);
+  background: var(--c-warn-bg, #fff4cc);
+  border-left: 3px solid var(--c-accent-ball, #F59E0B);
+  border-radius: var(--r-sm, 6px);
+}
+.svs-rebuild-hint--minor {
+  color: var(--c-text-muted, #667085);
+  background: var(--c-gray-light, #F5F5F3);
+  border-left-color: var(--c-border, #e4e7ec);
+}
+
+/* ---- Materialliste als Icon-Chips (2026-07-18) ---- */
+.svs-equipment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  list-style: none;
+  margin: var(--sp-2, 8px) 0 0;
+  padding: 0;
+}
+.svs-equipment__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: 999px;
+  background: var(--c-surface, #fff);
+  font-size: var(--fs-sm, 0.875rem);
+  line-height: 1.4;
+  color: var(--c-text, #111);
+}
+.svs-equipment__icon { display: inline-flex; flex: none; }
+.svs-equipment__icon svg { width: 16px; height: 16px; display: block; }
+
+@media print {
+  .svs-print__rebuild {
+    border-left: 3px solid #000;
+    padding-left: 6px;
+    margin: 6px 0 !important;
+    font-size: 10.5pt;
+  }
+}

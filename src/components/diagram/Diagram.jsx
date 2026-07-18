@@ -49,7 +49,28 @@ export default function Diagram({ data, altText, playing = false }) {
       </p>
     );
   }
-  const arrows = d.arrows ?? [];
+  // Entscheidung 2026-07-17: Laufwege (type "run") werden nicht mehr angezeigt –
+  // sie machten die Grafiken unruhig. Pass-, Dribbel- und Schusswege bleiben.
+  const arrows = (d.arrows ?? []).filter((a) => a.type !== 'run');
+
+  // Ball-Garantie (Entscheidung 2026-07-17): Jede Grafik zeigt mindestens
+  // einen Ball. Fehlt er in den Daten, wird er neben dem ersten Spieler
+  // eingeblendet (Übungsform: Startposition, Spielform: beim Ballführenden).
+  // Haben laut Daten alle Spieler einen Ball, bleiben alle Bälle sichtbar.
+  const dataBalls = d.balls ?? [];
+  const firstPlayer = (d.players ?? [])[0];
+  const balls =
+    dataBalls.length > 0
+      ? dataBalls
+      : [
+          firstPlayer
+            ? {
+                x: Math.min(Math.max(firstPlayer.x + 3, 2), 98),
+                y: Math.min(Math.max(firstPlayer.y + 2, 2), 98),
+              }
+            : { x: 50, y: 50 },
+        ];
+
   // Sequenzieller Ablaufplan: echte Spieler/Bälle laufen die Aktionen nacheinander ab.
   const plan = playing ? buildAnimationPlan(d) : null;
   return (
@@ -126,10 +147,10 @@ export default function Diagram({ data, altText, playing = false }) {
       {/* Material – Bälle laufen bei aktiver Animation selbst mit */}
       <g aria-hidden="true">
         {(d.cones ?? []).map((c, i) => <ConeMarker key={`c${i}`} c={c} />)}
-        {(d.balls ?? []).map((b, i) => (
+        {balls.map((b, i) => (
           <g key={`b${i}`}>
             <BallMarker b={b} />
-            {plan && <MotionSegments segments={plan.ballAnims[i]} />}
+            {plan?.ballAnims?.[i] && <MotionSegments segments={plan.ballAnims[i]} />}
           </g>
         ))}
       </g>

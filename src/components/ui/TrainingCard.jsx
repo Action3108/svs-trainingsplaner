@@ -1,5 +1,6 @@
 export default function TrainingCard({
   phaseLabel,
+  exerciseId,
   title,
   meta,
   defaultOpen = false,
@@ -9,7 +10,10 @@ export default function TrainingCard({
     <details className="svs-card" open={defaultOpen}>
       <summary className="svs-card__summary">
         <span className="svs-card__phase">{phaseLabel}</span>
-        <h3 className="svs-card__title">{title}</h3>
+        <h3 className="svs-card__title">
+          {exerciseId && <span className="svs-card__id">{exerciseId} · </span>}
+          {title}
+        </h3>
         {meta && <span className="svs-card__meta">{meta}</span>}
         <svg
           className="svs-card__chevron"

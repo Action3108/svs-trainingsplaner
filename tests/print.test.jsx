@@ -14,10 +14,10 @@ afterEach(() => vi.unstubAllGlobals());
 describe('Dateiname & Druck', () => {
   it('baut sprechende Dateinamen', () => {
     const name = buildFileName(
-      { ageGroup: 'D', focus: '1 gegen 1 offensiv' },
+      { ageGroup: 'D', focus: '1 gegen 1' },
       new Date('2026-07-13T12:00:00Z')
     );
-    expect(name).toBe('SVS_Training_D-Jugend_1-gegen-1-offensiv_2026-07-13');
+    expect(name).toBe('SVS_Training_D-Jugend_1-gegen-1_2026-07-13');
   });
 
   it('setzt den Dokumenttitel für das PDF und stellt ihn danach wieder her', () => {
@@ -51,12 +51,13 @@ describe('PrintView', () => {
 });
 
 describe('Aktionen im Plan', () => {
-  it('bietet PDF und Drucken an; Teilen nur mit Web-Share-Unterstützung', () => {
+  it('bietet genau eine Hauptaktion (PDF/Druck); Teilen nur mit Web-Share-Unterstützung', () => {
     const { unmount } = render(
       <TrainingPlan plan={plan} inputs={inputs} onVariant={() => {}} />
     );
-    expect(screen.getByRole('button', { name: /PDF erstellen/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /^Drucken$/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /PDF speichern \/ drucken/ })).toBeInTheDocument();
+    // kein paralleler Drucken-Button mit gleicher Funktion mehr
+    expect(screen.queryByRole('button', { name: /^Drucken$/ })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^Teilen$/ })).not.toBeInTheDocument();
     unmount();
 

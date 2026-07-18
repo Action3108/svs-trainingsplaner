@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import App from '../src/App.jsx';
-import TrainingPlan, { RebuildStatus } from '../src/components/TrainingPlan.jsx';
+import TrainingPlan, { RebuildStatus, RebuildHint } from '../src/components/TrainingPlan.jsx';
 import { generateTraining, PHASE_LABELS } from '../src/logic/generator.js';
 import fallbackDb from '../src/data/fallbackExercises.json';
 
@@ -66,31 +66,33 @@ describe('Training erstellen (Integration)', () => {
 describe('TrainingPlan-Komponente', () => {
   const inputs = { ageGroup: 'E', duration: 90, focus: 'Passspiel', players: 8 };
 
-  it('zeigt die Umbauampel in allen drei Stufen', () => {
+  it('zeigt oben nur die grüne Meldung; Umbaudetails stehen im Hinweis zwischen den Übungen', () => {
     const { rerender } = render(<RebuildStatus rebuilds={0} />);
     expect(screen.getByText(/Kein Umbau nötig/)).toBeInTheDocument();
-    rerender(<RebuildStatus rebuilds={1} changes={[{ from: 'a', to: 'b' }]} />);
-    expect(screen.getByText(/1 Umbau nötig: a → b/)).toBeInTheDocument();
-    rerender(
-      <RebuildStatus rebuilds={2} changes={[{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }]} />
-    );
-    expect(screen.getByText(/2 Umbauten nötig/)).toBeInTheDocument();
+    // Bei Umbauten erscheint oben keine große Meldung mehr …
+    rerender(<RebuildStatus rebuilds={1} />);
+    expect(screen.queryByText(/Kein Umbau nötig/)).not.toBeInTheDocument();
+    // … sondern ein kurzer Hinweis zwischen den betroffenen Übungen
+    render(<RebuildHint change={{ from: 'Quadrat 20×20 m', to: 'Halbes Spielfeld 45×35 m' }} />);
+    expect(
+      screen.getByText(/Umbau: Quadrat 20×20 m → Halbes Spielfeld 45×35 m/)
+    ).toBeInTheDocument();
+    render(<RebuildHint change={{ from: 'a', to: 'b' }} minor />);
+    expect(screen.getByText(/Kleine Anpassung: a → b/)).toBeInTheDocument();
   });
 
   it('zeigt Kerninfos direkt und die weiteren Details erst im Infos-Sheet', () => {
     const plan = generateTraining(fallbackDb, inputs);
     const { unmount } = render(<TrainingPlan plan={plan} inputs={inputs} onVariant={() => {}} />);
-    // Kerninfos direkt auf der Karte:
+    // Kerninfos direkt auf der Karte (Informationskarten, Backlog §12):
     expect(screen.getAllByText('Trainingsziel').length).toBe(6);
     expect(screen.getAllByText('Aufbau').length).toBe(6);
-    expect(screen.getAllByText('Coachingpunkte').length).toBe(6);
-    // Details erst nach Klick auf „Infos“:
-    expect(screen.queryByText('Leichtere Variante')).not.toBeInTheDocument();
+    expect(screen.getAllByText('Coaching').length).toBe(6);
+    expect(screen.getAllByText('Material').length).toBe(6);
+    // Weitere Details erst nach Klick auf „Infos“:
     expect(screen.queryByText('Mannschaftseinteilung')).not.toBeInTheDocument();
     fireEvent.click(screen.getAllByRole('button', { name: /^Infos$/ })[0]);
-    expect(screen.getByText('Leichtere Variante')).toBeInTheDocument();
     expect(screen.getByText('Mannschaftseinteilung')).toBeInTheDocument();
-    expect(screen.getByText('Material')).toBeInTheDocument();
     unmount();
   });
 

@@ -1,16 +1,16 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import Diagram from './Diagram.jsx';
 import { validateDiagramData } from '../../logic/diagramSchema.js';
 
 /**
  * Diagrammkarte: Titel, Übungsart, Meta-Chips (Spieler, Feldgröße, Tore),
- * Spielfeld, kurze Erklärung, einklappbare Chip-Legende,
- * Vollbild-Button und optionale Ablauf-Animation.
+ * Spielfeld, kurze Erklärung, einklappbare Chip-Legende und Vollbild-Button.
+ * Entscheidung 2026-07-17: Laufwege und Ablauf-Animation sind ausgeblendet –
+ * die Grafiken zeigen den ruhigen Grundaufbau mit Ball.
  */
 
 const LEGEND_CHIPS = [
   { key: 'pass', label: 'Pass', swatch: { borderBottom: '3px dashed var(--dgm-pass)' } },
-  { key: 'run', label: 'Laufweg', swatch: { borderBottom: '3px solid var(--dgm-run)' } },
   { key: 'dribble', label: 'Dribbling', swatch: { borderBottom: '3px dotted var(--dgm-dribble)' } },
   { key: 'shot', label: 'Torschuss', swatch: { borderBottom: '4px solid var(--dgm-shot)' } },
   { key: 'ball', label: '⚽ Ball' },
@@ -25,16 +25,9 @@ export default function DiagramCard({
   data,
   altText,
   defaultLegendOpen = false,
-  animatable,
 }) {
   const dialogRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
-  const { valid, data: d } = validateDiagramData(data);
-  const hasArrows = valid && (d?.arrows?.length ?? 0) > 0;
-  // Spielformen und Abschlussspiel brauchen keine Ablauf-Animation
-  // (freies Spiel statt fester Abfolge) – außer explizit übersteuert.
-  const isGamePhase = /spielform|abschlussspiel/i.test(type ?? '');
-  const canAnimate = (animatable ?? !isGamePhase) && hasArrows;
+  const { valid } = validateDiagramData(data);
 
   const metaChips = [
     meta.players && { icon: '👥', label: meta.players },
@@ -71,19 +64,7 @@ export default function DiagramCard({
         </ul>
       )}
 
-      <Diagram data={data} altText={altText} playing={canAnimate && playing} />
-
-      {canAnimate && (
-        <button
-          type="button"
-          className="dgm-card__play no-print"
-          aria-pressed={playing}
-          onClick={() => setPlaying((p) => !p)}
-          style={{ marginTop: 'var(--sp-2, 8px)' }}
-        >
-          {playing ? '⏸ Animation anhalten' : '▶ Ablauf abspielen'}
-        </button>
-      )}
+      <Diagram data={data} altText={altText} />
 
       {description && <p className="dgm-card__desc">{description}</p>}
 
@@ -98,14 +79,14 @@ export default function DiagramCard({
                 {c.label}
               </li>
             ))}
-            <li className="dgm-chip">🔵 Team Blau · 🔴 Team Koralle · ⬡ N Neutral · 🧤 Torwart · 🧍 Trainer · Pylone</li>
+            <li className="dgm-chip">🔵 Team Blau · 🔴 Team Rot · ⬡ N Neutral · 🧤 Torwart · 🧍 Trainer · Pylone</li>
           </ul>
         </details>
       )}
 
       {valid && (
         <dialog className="dgm-dialog" ref={dialogRef} aria-label={`${title ?? 'Diagramm'} – vergrößert`}>
-          <Diagram data={data} altText={altText} playing={canAnimate && playing} />
+          <Diagram data={data} altText={altText} />
           <button
             type="button"
             className="dgm-card__play"

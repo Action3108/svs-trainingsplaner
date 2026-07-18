@@ -108,4 +108,4 @@
 /* Karten: größerer Radius, weichere Schatten, Phase-Badge grün */
 [data-theme='v2'] .svs-card { border: 1px solid var(--c-border); }
 [data-theme='v2'] .svs-card__phase { background: var(--c-primary); }
-[data-theme='v2'] de
+[data-theme='v2'] details[open].svs-card { border-color: var(--c-primary); }

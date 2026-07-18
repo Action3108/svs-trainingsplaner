@@ -22,7 +22,7 @@ describe('App', () => {
     expect(
       screen.getByAltText(/Vereinslogo SV Schöning 1926 e\.V\./i)
     ).toBeInTheDocument();
-    await screen.findByText(/eingebaute Beispielübungen/i); // Ladevorgang abschließen lassen
+    await screen.findByRole('status');
   });
 
   it('zeigt offline ohne Cache den Fallback-Hinweis', async () => {

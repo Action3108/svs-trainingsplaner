@@ -4,16 +4,6 @@ import { assembleDatabase, TAB_HEADERS } from './sheetSchema.js';
 import fallbackDb from '../data/fallbackExercises.json';
 
 /**
- * Datenzugriff mit Fallback-Kette:
- * 1. aktuelles Google Sheet (Publish-CSV oder gviz-CSV)
- * 2. letzte gültige lokale Kopie (localStorage, mit Zeitstempel)
- * 3. kleine Fallback-Datenbank aus dem Repository (fallbackExercises.json)
- *
- * Rückgabe von loadDatabase():
- * { db, source: 'network'|'cache'|'fallback', updatedAt: ISO-String|null, errors: string[] }
- */
-
-/**
  * CSV → Objekte mit kanonischen Spaltennamen: Stimmt die Spaltenzahl der
  * Antwort mit dem Datenmodell überein, gelten die kanonischen Namen
  * (die gviz-Query-Engine ersetzt Spaltenköpfe teils durch Zellwerte).
@@ -40,6 +30,16 @@ function tabToObjects(tab, text) {
       return obj;
     });
 }
+
+/**
+ * Datenzugriff mit Fallback-Kette:
+ * 1. aktuelles Google Sheet (Publish-CSV oder gviz-CSV)
+ * 2. letzte gültige lokale Kopie (localStorage, mit Zeitstempel)
+ * 3. kleine Fallback-Datenbank aus dem Repository (fallbackExercises.json)
+ *
+ * Rückgabe von loadDatabase():
+ * { db, source: 'network'|'cache'|'fallback', updatedAt: ISO-String|null, errors: string[] }
+ */
 
 async function fetchCsvText(url, fetchImpl) {
   const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Header from './components/ui/Header.jsx';
 import ComponentPreview from './ComponentPreview.jsx';
+import ReviewMode from './components/ReviewMode.jsx';
 import DataStatus from './components/DataStatus.jsx';
 import PrintView from './components/PrintView.jsx';
 import TrainingForm from './components/TrainingForm.jsx';
@@ -10,9 +11,14 @@ import { generateTraining } from './logic/generator.js';
 import { applyExchange } from './logic/exchange.js';
 
 export default function App() {
+  const params = new URLSearchParams(window.location.search);
   // Komponenten-Vorschau: /?preview=1 aufrufen
-  if (new URLSearchParams(window.location.search).get('preview') === '1') {
+  if (params.get('preview') === '1') {
     return <ComponentPreview />;
+  }
+  // Interner Kontrollmodus für die Übungsprüfung: /?review=1 (nicht verlinkt)
+  if (params.get('review') === '1') {
+    return <ReviewMode />;
   }
   return <MainApp />;
 }

@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import TrainingCard from './ui/TrainingCard.jsx';
 import DiagramCard from './diagram/DiagramCard.jsx';
 import Diagram from './diagram/Diagram.jsx';
 import BottomSheet from './ui/BottomSheet.jsx';
 import Button from './ui/Button.jsx';
+import InfoGrid from './ui/InfoGrid.jsx';
+import EquipmentList from './ui/EquipmentList.jsx';
 import { findAlternatives } from '../logic/exchange.js';
 import { printTraining, canShare, shareTraining } from '../logic/share.js';
 
 /**
- * Ergebnisbereich: Zusammenfassung, Materialliste, Umbauampel,
- * sechs aufklappbare Trainingskarten mit Diagramm, Übungsaustausch
- * sowie „Alternative Einheit“.
- *
- * Jede Karte zeigt direkt nur die Kerninfos (Trainingsziel, Aufbau,
- * Ablauf, Regeln, Coachingpunkte). Alle weiteren Details öffnen sich
- * über den „Infos“-Button in einem Bottom Sheet.
+ * Ergebnisbereich nach dem Prinzip der progressiven Offenlegung:
+ * 1. kompakte Zusammenfassung (Dauer, Spieler, Material, Umbauampel,
+ *    Einheit im Überblick) mit genau einer Hauptaktion (PDF/Druck),
+ * 2. aufklappbare Trainingskarten mit Diagramm und Informationskarten,
+ * 3. weitere Details je Übung im „Infos“-Bottom-Sheet.
  */
 
 function Section({ title, text }) {
@@ -27,20 +27,35 @@ function Section({ title, text }) {
   );
 }
 
-/** Umbauampel: grün = kein Umbau, gelb = 1, rot = mehr. */
-export function RebuildStatus({ rebuilds, changes = [] }) {
-  if (rebuilds === 0) {
-    return (
-      <p className="svs-note svs-note--success">Kein Umbau nötig – alle Formen nutzen denselben Grundaufbau.</p>
-    );
-  }
-  const detail = changes
-    .map((c) => `${c.from} → ${c.to}`)
-    .join(' · ');
-  if (rebuilds === 1) {
-    return <p className="svs-note svs-note--warn">1 Umbau nötig: {detail}</p>;
-  }
-  return <p className="svs-note svs-note--error">{rebuilds} Umbauten nötig: {detail}</p>;
+/**
+ * Umbauampel (kompakt, 2026-07-18): Oben erscheint nur noch die grüne
+ * Erfolgsmeldung. Umbauten und kleine Anpassungen stehen als kurze
+ * Hinweise direkt zwischen den betroffenen Übungen (RebuildHint).
+ */
+export function RebuildStatus({ rebuilds, adjustments = 0 }) {
+  if (rebuilds > 0) return null;
+  return (
+    <p className="svs-note svs-note--success">
+      Kein Umbau nötig – die ganze Einheit läuft auf einem Grundfeld.
+      {adjustments > 0 ? ' Kleine Feld-Anpassungen stehen zwischen den Übungen.' : ''}
+    </p>
+  );
+}
+
+/**
+ * Kurzer Umbau-Hinweis zwischen zwei Übungen,
+ * z. B. „Umbau: Quadrat 20×20 m → Halbes Spielfeld 45×35 m".
+ */
+export function RebuildHint({ change, minor = false }) {
+  if (!change) return null;
+  return (
+    <p className={`svs-rebuild-hint${minor ? ' svs-rebuild-hint--minor' : ''}`}>
+      <span aria-hidden="true">🔁</span>
+      <span>
+        {minor ? 'Kleine Anpassung' : 'Umbau'}: {change.from} → {change.to}
+      </span>
+    </p>
+  );
 }
 
 function organizationText(org, players) {
@@ -56,17 +71,14 @@ function InfoSheet({ open, phase, players, onClose }) {
   const e = phase.exercise;
   const org = phase.organization;
   return (
-    <BottomSheet open={open} title={`Infos – ${e.title}`} onClose={onClose}>
+    <BottomSheet open={open} title={`Infos – ${e.id} · ${e.title}`} onClose={onClose}>
       <Section title="Mannschaftseinteilung" text={organizationText(org, players)} />
       {org.oddPlayerHint && (
         <Section title="Ungerade Spielerzahl" text={org.oddPlayerHint} />
       )}
-      <Section title="Material" text={(e.equipment ?? []).join(', ')} />
       <Section title="Kommandos" text={e.coachingCommands} />
       <Section title="Häufige Fehler" text={e.commonMistakes} />
       <Section title="Korrekturen" text={e.corrections} />
-      <Section title="Leichtere Variante" text={e.regression} />
-      <Section title="Schwierigere Variante" text={e.progression} />
       <Section title="Übergang zur nächsten Form" text={e.transitionHints} />
       {e.videoVerified && e.videoUrl && (
         <p>
@@ -111,13 +123,16 @@ function ExchangeSheet({ open, phase, alternatives, onSelect, onClose }) {
           Zeitfenster lassen keine weitere Übung zu.
         </p>
       )}
-      {alternatives.map(({ exercise: e, sameField }) => (
+      {alternatives.map(({ exercise: e, sameField, sameClass }) => (
         <article key={e.id} className="svs-card" style={{ padding: 'var(--sp-3, 12px)' }}>
-          <h4 className="svs-card__title">{e.title}</h4>
+          <h4 className="svs-card__title">
+            <span className="svs-card__id">{e.id} · </span>
+            {e.title}
+          </h4>
           <p className="svs-card__meta">
             {e.durationMin}–{e.durationMax} min · {e.minPlayers}–{e.maxPlayers} Spieler
             {e.intensity ? ` · ${e.intensity}` : ''} ·{' '}
-            {sameField ? 'kein Umbau' : 'Umbau nötig'}
+            {sameField ? 'kein Umbau' : sameClass ? 'kleine Anpassung' : 'Umbau nötig'}
           </p>
           <div style={{ maxWidth: 320 }}>
             <Diagram data={e.diagram?.data} altText={`Vorschau: ${e.title}`} />
@@ -139,6 +154,7 @@ function PhaseCard({ phase, players, defaultOpen, onOpenInfo, onOpenExchange }) 
   return (
     <TrainingCard
       phaseLabel={phase.label}
+      exerciseId={e.id}
       title={e.title}
       meta={`${phase.duration} min · ${players} Spieler`}
       defaultOpen={defaultOpen}
@@ -154,10 +170,7 @@ function PhaseCard({ phase, players, defaultOpen, onOpenInfo, onOpenExchange }) 
         }}
       />
       <Section title="Trainingsziel" text={e.objective} />
-      <Section title="Aufbau" text={e.setup} />
-      <Section title="Ablauf" text={e.procedure} />
-      <Section title="Regeln" text={e.rules} />
-      <Section title="Coachingpunkte" text={e.coachingPoints} />
+      <InfoGrid exercise={e} />
       <p style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <Button variant="secondary" onClick={onOpenInfo}>
           Infos
@@ -209,18 +222,37 @@ export default function TrainingPlan({
   return (
     <section className="svs-plan" aria-label="Erstelltes Training">
       <div className="svs-note svs-note--info">
-        Gesamtdauer {plan.totalDuration} min · {inputs.players} Spieler ·{' '}
-        {inputs.focus} · Material: {plan.equipment.join(', ')}
+        <span>
+          Gesamtdauer {plan.totalDuration} min · {inputs.players} Spieler ·{' '}
+          {inputs.focus}
+          {plan.structureLabel && (
+            <>
+              <br />
+              {plan.structureLabel}
+            </>
+          )}
+          <EquipmentList items={plan.equipment} />
+        </span>
       </div>
-      <RebuildStatus rebuilds={plan.rebuilds} changes={plan.rebuildChanges} />
+      <RebuildStatus rebuilds={plan.rebuilds} adjustments={plan.adjustments} />
 
-      <p className="no-print" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <Button onClick={() => printTraining(inputs)}>PDF erstellen</Button>
-        <Button variant="secondary" onClick={() => printTraining(inputs)}>
-          Drucken
-        </Button>
+      {/* Kompakte Übersicht zuerst (progressive Offenlegung): der Trainer sieht
+          die ganze Einheit auf einen Blick, Details stehen in den Karten. */}
+      <ol className="svs-overview" aria-label="Einheit im Überblick">
+        {plan.phases.map((p) => (
+          <li key={p.phase}>
+            <span className="svs-overview__time">{p.duration} min</span>
+            <span className="svs-overview__text">
+              {p.label}: <span className="svs-card__id">{p.exercise.id}</span> {p.exercise.title}
+            </span>
+          </li>
+        ))}
+      </ol>
+
+      <p className="no-print" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+        <Button onClick={() => printTraining(inputs)}>PDF speichern / drucken</Button>
         {canShare() && (
-          <Button variant="secondary" onClick={() => shareTraining(plan, inputs)}>
+          <Button variant="ghost" onClick={() => shareTraining(plan, inputs)}>
             Teilen
           </Button>
         )}
@@ -235,16 +267,23 @@ export default function TrainingPlan({
         </p>
       )}
 
-      {displayPhases.map((p, i) => (
-        <PhaseCard
-          key={p.phase}
-          phase={p}
-          players={inputs.players}
-          defaultOpen={i === 0}
-          onOpenInfo={() => setInfoFor(i)}
-          onOpenExchange={onExchange ? () => setExchangeFor(i) : undefined}
-        />
-      ))}
+      {displayPhases.map((p, i) => {
+        // Umbau-Hinweis genau dort, wo der Wechsel stattfindet
+        const rebuild = (plan.rebuildChanges ?? []).find((c) => c.beforePhase === p.phase);
+        const adjust = (plan.adjustmentChanges ?? []).find((c) => c.beforePhase === p.phase);
+        return (
+          <Fragment key={p.phase}>
+            {i > 0 && (rebuild ? <RebuildHint change={rebuild} /> : <RebuildHint change={adjust} minor />)}
+            <PhaseCard
+              phase={p}
+              players={inputs.players}
+              defaultOpen={i === 0}
+              onOpenInfo={() => setInfoFor(i)}
+              onOpenExchange={onExchange ? () => setExchangeFor(i) : undefined}
+            />
+          </Fragment>
+        );
+      })}
 
       <InfoSheet
         open={infoFor !== null}

@@ -38,23 +38,34 @@ export default function PrintView({ plan, inputs }) {
           {inputs.players} Spieler · {plan.totalDuration} Minuten
         </strong>
       </p>
+      <P t="Struktur" x={plan.structureLabel} />
       <P t="Material gesamt" x={plan.equipment.join(', ')} />
-      <P
-        t="Umbauten"
-        x={
-          plan.rebuilds === 0
-            ? 'keine – ein Grundaufbau für die gesamte Einheit'
-            : plan.rebuildChanges.map((c) => `${c.from} → ${c.to}`).join(' · ')
-        }
-      />
+      {plan.rebuilds === 0 && (
+        <P t="Umbauten" x="keine – ein Grundaufbau für die gesamte Einheit" />
+      )}
 
       {plan.phases.map((p) => {
         const e = p.exercise;
         const org = p.organization;
+        // Umbau-Hinweis direkt vor der Übung, bei der umgebaut wird
+        const rebuild = (plan.rebuildChanges ?? []).find((c) => c.beforePhase === p.phase);
+        const adjust = (plan.adjustmentChanges ?? []).find((c) => c.beforePhase === p.phase);
         return (
           <article key={p.phase} className="svs-print__phase">
+            {rebuild && (
+              <p className="svs-print__rebuild">
+                <strong>🔁 Umbau: </strong>
+                {rebuild.from} → {rebuild.to}
+              </p>
+            )}
+            {!rebuild && adjust && (
+              <p className="svs-print__rebuild">
+                <strong>Kleine Anpassung: </strong>
+                {adjust.from} → {adjust.to}
+              </p>
+            )}
             <h2>
-              {p.label}: {e.title} ({p.duration} min)
+              {p.label}: {e.id} · {e.title} ({p.duration} min)
             </h2>
             <div className="svs-print__diagram">
               <Diagram

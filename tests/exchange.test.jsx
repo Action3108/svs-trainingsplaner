@@ -35,7 +35,7 @@ function fixtureDb() {
   const exercises = PHASE_ORDER.map((phase) => ex({ id: `A-${phase}`, phase, title: `A ${phase}` }));
   exercises.push(
     ex({ id: 'ALT-1', title: 'Alternative Eins', equipment: ['Leibchen'] }),
-    ex({ id: 'ALT-2', title: 'Alternative Zwei', fieldTemplate: 'anderes_feld' }),
+    ex({ id: 'ALT-2', title: 'Alternative Zwei', fieldTemplate: 'anderes_feld', fieldLength: 40, fieldWidth: 30 }),
     ex({ id: 'ALT-FALSCHER-FOKUS', title: 'Falscher Fokus', focusAreas: ['Kopfball'] }),
     ex({ id: 'ALT-ZU-KURZ', title: 'Zu kurz', durationMin: 1, durationMax: 3 }),
     ex({ id: 'ALT-ZU-GROSS', title: 'Zu groß', minPlayers: 20, maxPlayers: 30 })

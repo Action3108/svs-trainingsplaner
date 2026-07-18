@@ -147,13 +147,24 @@ describe('generateTraining', () => {
     expect(org.oddPlayerHint).toBeTruthy();
   });
 
-  it('zählt Umbauten korrekt', () => {
-    const { rebuilds } = countRebuilds([
-      ex({ fieldTemplate: 'a' }),
-      ex({ fieldTemplate: 'a' }),
-      ex({ fieldTemplate: 'b' }),
+  it('zählt wesentliche Umbauten (Größenklassenwechsel) korrekt', () => {
+    const { rebuilds, adjustments } = countRebuilds([
+      ex({ fieldTemplate: 'a', fieldLength: 20, fieldWidth: 20 }), // S
+      ex({ fieldTemplate: 'a', fieldLength: 20, fieldWidth: 20 }), // S
+      ex({ fieldTemplate: 'b', fieldLength: 30, fieldWidth: 25 }), // M → Umbau
     ]);
     expect(rebuilds).toBe(1);
+    expect(adjustments).toBe(0);
+  });
+
+  it('wertet Vorlagenwechsel in gleicher Größenklasse als kleine Anpassung', () => {
+    const { rebuilds, adjustments, adjustmentChanges } = countRebuilds([
+      ex({ fieldTemplate: 'quadrat_klein', fieldLength: 25, fieldWidth: 20 }),
+      ex({ fieldTemplate: 'vier_tore', fieldLength: 25, fieldWidth: 20 }), // Tore dazustellen
+    ]);
+    expect(rebuilds).toBe(0);
+    expect(adjustments).toBe(1);
+    expect(adjustmentChanges[0].to).toMatch(/vier_tore/);
   });
 });
 

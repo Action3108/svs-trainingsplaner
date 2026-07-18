@@ -3,7 +3,7 @@ import { sy, VB_W, VB_H } from './scale.js';
 /**
  * Marker-Komponenten: Spieler, Ball, Pylonen, Tore, Zonen.
  * Teams über Farbe unterscheidbar:
- * Blau = Kreis · Koralle = Kreis · Neutral = Sechseck ·
+ * Blau = Kreis · Rot = Kreis · Neutral = Sechseck ·
  * Torwart = Handschuh-Piktogramm (kompakt) · Trainer = Person-Piktogramm.
  * Ball = klassisch schwarz-weiß. Keine weißen Außenringe.
  */

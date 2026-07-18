@@ -6,7 +6,7 @@ export const exampleDiagrams = [
   {
     id: 'beispiel-aufwaermen',
     title: 'Dribbelgarten',
-    type: 'Aufwärmen · Ballgewöhnung',
+    type: 'Aufwärmen · Dribbling',
     meta: { players: '8–16 Spieler', field: '20 × 20 m', goals: 'keine Tore' },
     description: 'Alle Kinder dribbeln frei zwischen den Hütchen. Der Trainer ruft Aufgaben wie Tempo- und Richtungswechsel.',
     caption: 'Aufwärmen: Dribbelgarten – alle Kinder mit Ball',
@@ -53,7 +53,7 @@ export const exampleDiagrams = [
     title: '1 gegen 1',
     type: 'Übungsform · Dribbling',
     meta: { players: '2 pro Feld', field: '15 × 12 m', goals: '2 Hütchentore' },
-    description: 'Blau dribbelt Koralle an und sucht den Durchbruch durch eines der beiden Hütchentore.',
+    description: 'Blau dribbelt Rot an und sucht den Durchbruch durch eines der beiden Hütchentore.',
     caption: 'Dribbling: 1 gegen 1 auf zwei Hütchentore',
     alt: 'Angreifer mit Ball gegen Verteidiger, zwei Hütchentore auf der rechten Grundlinie.',
     data: {
@@ -97,7 +97,7 @@ export const exampleDiagrams = [
     title: '3 gegen 3 mit Zielzone',
     type: 'Spielform · Umschalten',
     meta: { players: '6 Spieler', field: '25 × 20 m', goals: '4 Minitore' },
-    description: 'Blau spielt in die Zielzone, Koralle verteidigt und versucht, den Ball zu erobern.',
+    description: 'Blau spielt in die Zielzone, Rot verteidigt und versucht, den Ball zu erobern.',
     caption: 'Kleine Spielform: 3 gegen 3 auf vier Minitore mit Zielzone',
     alt: 'Zwei Dreierteams, vier Minitore, schraffierte Schusszonen an beiden Enden, neutraler Spieler.',
     data: {
