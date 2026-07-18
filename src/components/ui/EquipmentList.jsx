@@ -80,8 +80,51 @@ function shortLabel(item, re) {
   return rest;
 }
 
-export default function EquipmentList({ items = [] }) {
-  const list = (items ?? []).filter((s) => String(s ?? '').trim());
+/**
+ * Ranghöhe einer Materialangabe für die Zusammenfassung:
+ * „pro Kind/Spieler" bzw. „jeder" > „viele" > größte Zahl > ohne Zahl.
+ */
+function amountRank(item) {
+  if (/pro\s+(kind|spieler)|jede[rms]?\b|je\s+(kind|spieler)/i.test(item)) {
+    return Number.POSITIVE_INFINITY;
+  }
+  if (/viele/i.test(item)) return 1e6;
+  const m = String(item).match(/\d+/);
+  return m ? Number(m[0]) : 0;
+}
+
+/**
+ * Merge-Schlüssel: gleiche Icon-Kategorie = gleiches Material.
+ * Ausnahme Tore: Minitore und Jugend-/Großtore werden getrennt gezählt,
+ * weil beide gleichzeitig gebraucht werden können.
+ */
+function mergeKey(item) {
+  const m = MATCHERS.find((d) => d.re.test(item));
+  if (!m) return `text:${String(item).toLowerCase()}`;
+  if (m.icon === 'goal') return /minitor/i.test(item) ? 'goal:mini' : 'goal:gross';
+  return m.icon;
+}
+
+/**
+ * Fasst gleiche Materialien zusammen und behält je Gruppe nur die höchste
+ * Anforderung – z. B. „4 Bälle" + „1 Ball pro Kind" → „1 Ball pro Kind".
+ */
+export function mergeEquipment(items = []) {
+  const groups = new Map();
+  for (const item of items ?? []) {
+    if (!String(item ?? '').trim()) continue;
+    const key = mergeKey(item);
+    const prev = groups.get(key);
+    if (prev === undefined || amountRank(item) > amountRank(prev)) {
+      groups.set(key, item);
+    }
+  }
+  return [...groups.values()];
+}
+
+export default function EquipmentList({ items = [], merge = false }) {
+  const source = merge ? mergeEquipment(items) : items ?? [];
+  const list = source.filter((s) => String(s ?? '').trim());
   if (list.length === 0) return null;
   return (
     <ul className="svs-equipment" aria-label="Material">

@@ -231,7 +231,7 @@ export default function TrainingPlan({
               {plan.structureLabel}
             </>
           )}
-          <EquipmentList items={plan.equipment} />
+          <EquipmentList items={plan.equipment} merge />
         </span>
       </div>
       <RebuildStatus rebuilds={plan.rebuilds} adjustments={plan.adjustments} />
