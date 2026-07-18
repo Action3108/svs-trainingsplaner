@@ -6,55 +6,87 @@
  * Wortlaut steckt im title-/aria-label-Attribut (Barrierefreiheit).
  */
 
-const stroke = {
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: 1.8,
-  strokeLinecap: 'round',
-  strokeLinejoin: 'round',
+/**
+ * Detailreiche, farbige Icons (2026-07-18): Ball schwarz-weiß,
+ * Hütchen/Leibchen/Stange in den funktionalen Orangetönen des CI
+ * (#F97316 Hütchen, #F59E0B Ball-Akzent). Feste Farben, damit die
+ * Chips auch im Druck und in Graustufen erkennbar bleiben.
+ */
+const C = {
+  black: '#111111',
+  white: '#FFFFFF',
+  orange: '#F97316',
+  orangeDark: '#C2410C',
+  amber: '#F59E0B',
+  net: '#9CA3AF',
 };
 
 const ICONS = {
+  // Klassischer Fußball: weiß mit schwarzem Fünfeck und Nähten
   ball: (
     <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <circle {...stroke} cx="10" cy="10" r="7" />
-      <path {...stroke} d="M10 7.4l2.5 1.8-1 2.9h-3l-1-2.9z" />
-    </svg>
-  ),
-  cone: (
-    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path {...stroke} d="M10 3.5L14 15H6z" />
-      <path {...stroke} d="M4 16.5h12" />
-    </svg>
-  ),
-  goal: (
-    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path {...stroke} d="M3 16V5h14v11" />
-      <path {...stroke} d="M6.5 5v11M10 5v11M13.5 5v11" opacity="0.6" />
-    </svg>
-  ),
-  bib: (
-    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <circle cx="10" cy="10" r="7.4" fill={C.white} stroke={C.black} strokeWidth="1.2" />
+      <path d="M10 6.9l2.9 2.1-1.1 3.4H8.2L7.1 9z" fill={C.black} />
       <path
-        {...stroke}
-        d="M7 3.5l3 1.5 3-1.5 3.5 3-2 2.5-1-.8V17h-7V8.2l-1 .8-2-2.5z"
+        d="M10 6.9V3.7M12.9 9l2.95-1.3M11.8 12.4l1.85 2.55M8.2 12.4l-1.85 2.55M7.1 9L4.15 7.7"
+        stroke={C.black}
+        strokeWidth="1"
+        strokeLinecap="round"
+        fill="none"
       />
     </svg>
   ),
+  // Oranges Hütchen mit weißem Streifen und Fußplatte
+  cone: (
+    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path d="M10 2.8L14.1 14.6H5.9z" fill={C.orange} stroke={C.orangeDark} strokeWidth="0.8" strokeLinejoin="round" />
+      <path d="M7.8 8.3h4.4l.85 2.5H6.95z" fill={C.white} />
+      <rect x="3.8" y="14.6" width="12.4" height="2.4" rx="1.2" fill={C.orange} stroke={C.orangeDark} strokeWidth="0.8" />
+    </svg>
+  ),
+  // Tor mit Netz
+  goal: (
+    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path d="M6 5.2v10.6M8.7 5.2v10.6M11.3 5.2v10.6M14 5.2v10.6M3.6 8.5h12.8M3.6 11.5h12.8" stroke={C.net} strokeWidth="0.6" fill="none" />
+      <path d="M3.5 16.2V4.8h13v11.4" stroke={C.black} strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+      <path d="M2.2 16.2h15.6" stroke={C.black} strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  ),
+  // Oranges Leibchen
+  bib: (
+    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path
+        d="M7 3.4l3 1.4 3-1.4 3.4 2.9-1.9 2.4-1-.8v8.6H6.5V7.9l-1 .8-1.9-2.4z"
+        fill={C.orange}
+        stroke={C.orangeDark}
+        strokeWidth="0.8"
+        strokeLinejoin="round"
+      />
+      <path d="M8.3 4l1.7.8L11.7 4" stroke={C.white} strokeWidth="0.9" fill="none" strokeLinecap="round" />
+    </svg>
+  ),
+  // Slalomstange orange-weiß gestreift mit Spitze
   pole: (
     <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <path {...stroke} d="M10 3v14M7 17h6" />
+      <rect x="8.9" y="3" width="2.2" height="14" rx="1" fill={C.orange} />
+      <rect x="8.9" y="6.2" width="2.2" height="2.8" fill={C.white} />
+      <rect x="8.9" y="11.8" width="2.2" height="2.8" fill={C.white} />
+      <rect x="8.9" y="3" width="2.2" height="14" rx="1" fill="none" stroke={C.orangeDark} strokeWidth="0.7" />
+      <path d="M6.6 17h6.8" stroke={C.orangeDark} strokeWidth="1.1" strokeLinecap="round" />
     </svg>
   ),
+  // Reifen
   hoop: (
     <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <ellipse {...stroke} cx="10" cy="10" rx="7" ry="4.5" />
+      <ellipse cx="10" cy="10.5" rx="7" ry="4.6" fill="none" stroke={C.amber} strokeWidth="2.2" />
+      <ellipse cx="10" cy="10.5" rx="7" ry="4.6" fill="none" stroke={C.orangeDark} strokeWidth="0.5" opacity="0.5" />
     </svg>
   ),
+  // Flache Markierungsscheibe (Teller) mit Griffloch
   marker: (
     <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <ellipse {...stroke} cx="10" cy="12" rx="6" ry="2.5" />
-      <ellipse {...stroke} cx="10" cy="10" rx="6" ry="2.5" opacity="0.6" />
+      <ellipse cx="10" cy="12.3" rx="6.6" ry="2.7" fill={C.orange} stroke={C.orangeDark} strokeWidth="0.8" />
+      <ellipse cx="10" cy="11.5" rx="3" ry="1.15" fill={C.white} />
     </svg>
   ),
 };

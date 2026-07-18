@@ -493,7 +493,7 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   color: var(--c-text, #111);
 }
 .svs-equipment__icon { display: inline-flex; flex: none; }
-.svs-equipment__icon svg { width: 16px; height: 16px; display: block; }
+.svs-equipment__icon svg { width: 18px; height: 18px; display: block; }
 
 @media print {
   .svs-print__rebuild {
