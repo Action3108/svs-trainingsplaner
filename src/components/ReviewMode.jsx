@@ -21,6 +21,28 @@ import { REVIEW_MODE_ENABLED, REVIEW_STORAGE_KEY } from '../config.js';
  * - Das Deaktivieren des Modus löscht keine erfassten Prüfergebnisse.
  */
 
+// Kleine Stroke-Icons für die Stammdaten-Zeile (erben die Textfarbe).
+const metaStroke = {
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.6,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+};
+const PersonIcon = (
+  <svg className="svs-meta-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+    <circle {...metaStroke} cx="10" cy="6.2" r="3.1" />
+    <path {...metaStroke} d="M4.2 16.6c0-3.2 2.6-5.7 5.8-5.7s5.8 2.5 5.8 5.7" />
+  </svg>
+);
+const StopwatchIcon = (
+  <svg className="svs-meta-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+    <path {...metaStroke} d="M8.1 2.4h3.8M10 2.4v1.7" />
+    <circle {...metaStroke} cx="10" cy="11.4" r="6" />
+    <path {...metaStroke} d="M10 11.4V7.9M14.6 6.9l1-1" />
+  </svg>
+);
+
 export const REVIEW_AREAS = [
   'Stammdaten',
   'Aufbau',
@@ -124,6 +146,7 @@ export default function ReviewMode() {
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState(null);
   const [validationError, setValidationError] = useState(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileRef = useRef(null);
 
   // Stabile, reproduzierbare Reihenfolge: aufsteigend nach Übungs-ID
@@ -308,33 +331,90 @@ export default function ReviewMode() {
           </span>
         </div>
 
-        <SelectField
-          label="Zu Übung springen"
-          options={exercises.map((x, i) => {
-            const st = state.entries[x.id]?.status ?? 'Prüfung offen';
-            const done = st !== 'Prüfung offen';
-            return {
-              value: String(i),
-              label: `${done ? '✓ ' : '– '}${x.id} · ${x.title} (${st})`,
-              style: done ? { backgroundColor: '#DCFCE7', color: '#111111' } : undefined,
-            };
-          })}
-          value={String(index)}
-          onChange={(ev) => goto(Number(ev.target.value))}
-        />
+        {/* Eigene Auswahlliste statt <select>: native Options lassen sich in
+            vielen Browsern/auf Handys nicht grün einfärben. Hier ist die grüne
+            Markierung bereits geprüfter Übungen überall zuverlässig sichtbar. */}
+        <div className="svs-review-picker">
+          <button
+            type="button"
+            className="svs-review-picker__toggle"
+            aria-expanded={pickerOpen}
+            onClick={() => setPickerOpen((o) => !o)}
+          >
+            <span>Zu Übung springen</span>
+            <span className="svs-review-picker__chev" aria-hidden="true">
+              {pickerOpen ? '▲' : '▼'}
+            </span>
+          </button>
+          {pickerOpen && (
+            <ul className="svs-review-picker__list" role="listbox" aria-label="Übung auswählen">
+              {exercises.map((x, i) => {
+                const st = state.entries[x.id]?.status ?? 'Prüfung offen';
+                const done = st !== 'Prüfung offen';
+                return (
+                  <li key={x.id}>
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={i === index}
+                      className={
+                        'svs-review-picker__item' +
+                        (done ? ' is-done' : '') +
+                        (i === index ? ' is-current' : '')
+                      }
+                      onClick={() => {
+                        goto(i);
+                        setPickerOpen(false);
+                      }}
+                    >
+                      <span className="svs-review-picker__mark" aria-hidden="true">
+                        {done ? '✓' : '○'}
+                      </span>
+                      <span className="svs-review-picker__label">
+                        {x.id} · {x.title}
+                      </span>
+                      <span className="svs-review-picker__status">{st}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
 
         <article className="svs-card" style={{ padding: 'var(--sp-3, 12px)' }}>
           <h2 className="svs-card__title">
             <span className="svs-card__id">{e.id} · </span>
             {e.title}
           </h2>
-          <p className="svs-card__meta" style={{ whiteSpace: 'normal' }}>
-            {e.focusAreas.join(', ')} · Jugend: {e.ageGroups.join(', ')} ·{' '}
-            {e.minPlayers}–{e.maxPlayers} Spieler · {e.durationMin}–{e.durationMax} min ·{' '}
-            Phase: {e.phase} · Intensität: {e.intensity || '–'}
+          <p
+            className="svs-card__meta"
+            style={{
+              whiteSpace: 'normal',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: '3px 12px',
+            }}
+          >
+            <span>{e.focusAreas.join(', ')}</span>
+            <span>Jugend: {e.ageGroups.join(', ')}</span>
+            <span className="svs-meta-chip" title={`${e.minPlayers}–${e.maxPlayers} Spieler`}>
+              {PersonIcon}
+              {e.minPlayers}–{e.maxPlayers}
+            </span>
+            <span
+              className="svs-meta-chip"
+              title={`${e.durationMin}–${e.durationMax} Minuten`}
+            >
+              {StopwatchIcon}
+              {e.durationMin}–{e.durationMax}
+            </span>
+            <span>Phase: {e.phase}</span>
           </p>
           <DiagramCard
             type={e.phase}
+            phase={e.phase}
             data={e.diagram?.data}
             altText={e.diagram?.diagramAltText || `Übungsgrafik: ${e.title}`}
             meta={{

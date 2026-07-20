@@ -22,18 +22,25 @@ const C = {
 };
 
 const ICONS = {
-  // Klassischer Fußball: weiß mit schwarzem Fünfeck und Nähten
+  // Klassischer Fußball (nachgebaut nach Vorlage 2026-07-20): weißer Ball mit
+  // schwarzem Ring, Mittel-Fünfeck, fünf Rand-Fünfecken und Nähten.
   ball: (
-    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <circle cx="10" cy="10" r="7.4" fill={C.white} stroke={C.black} strokeWidth="1.2" />
-      <path d="M10 6.9l2.9 2.1-1.1 3.4H8.2L7.1 9z" fill={C.black} />
+    <svg viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+      <circle cx="256" cy="256" r="236" fill={C.white} />
       <path
-        d="M10 6.9V3.7M12.9 9l2.95-1.3M11.8 12.4l1.85 2.55M8.2 12.4l-1.85 2.55M7.1 9L4.15 7.7"
+        d="M256 184V34M332.1 239.3L467.1 187.4M303 328.7L386.5 435.6M209 328.7L125.5 435.6M179.9 239.3L44.9 187.4"
         stroke={C.black}
-        strokeWidth="1"
+        strokeWidth="20"
         strokeLinecap="round"
         fill="none"
       />
+      <path d="M256 184L332.1 239.3L303 328.7H209L179.9 239.3Z" fill={C.black} />
+      <path d="M424.4 96.2L398.2 176.7H313.6L287.4 96.2L355.9 46.5Z" fill={C.black} />
+      <path d="M460 366.8H375.4L349.2 286.3L417.7 236.5L486.2 286.3Z" fill={C.black} />
+      <path d="M213.7 484.2L187.5 403.8L256 354L324.5 403.8L298.3 484.2Z" fill={C.black} />
+      <path d="M25.8 286.3L94.3 236.5L162.8 286.3L136.6 366.8H52Z" fill={C.black} />
+      <path d="M156.1 46.5L224.6 96.2L198.4 176.7H113.8L87.6 96.2Z" fill={C.black} />
+      <circle cx="256" cy="256" r="236" fill="none" stroke={C.black} strokeWidth="24" />
     </svg>
   ),
   // Oranges Hütchen mit weißem Streifen und Fußplatte

@@ -25,7 +25,14 @@ function MotionSegments({ segments }) {
  * Ein Renderer für alle Diagramme – Eingabe sind ausschließlich
  * die vorhandenen diagramData (Koordinaten 0–100), gerendert im 16:10-Format.
  */
-export default function Diagram({ data, altText, playing = false }) {
+/**
+ * In Spielformen und im Abschlussspiel werden zusätzlich Pass- und
+ * Torschuss-Pfeile ausgeblendet (Wunsch André 2026-07-20): die Grafik zeigt
+ * dort nur den ruhigen Grundaufbau. Dribbelwege bleiben erhalten.
+ */
+const HIDE_PASS_SHOT_PHASES = new Set(['game_form_1', 'game_form_2', 'final_game']);
+
+export default function Diagram({ data, altText, phase = null, playing = false }) {
   const svgRef = useRef(null);
 
   // SMIL-Zeitbasis: begin="0s" bezieht sich auf den Start der SVG-Zeitleiste
@@ -50,8 +57,12 @@ export default function Diagram({ data, altText, playing = false }) {
     );
   }
   // Entscheidung 2026-07-17: Laufwege (type "run") werden nicht mehr angezeigt –
-  // sie machten die Grafiken unruhig. Pass-, Dribbel- und Schusswege bleiben.
-  const arrows = (d.arrows ?? []).filter((a) => a.type !== 'run');
+  // sie machten die Grafiken unruhig. Zusätzlich (2026-07-20) werden in
+  // Spielformen und Abschlussspiel Pass- und Schusswege ausgeblendet.
+  const hidePassShot = HIDE_PASS_SHOT_PHASES.has(phase);
+  const arrows = (d.arrows ?? []).filter(
+    (a) => a.type !== 'run' && !(hidePassShot && (a.type === 'pass' || a.type === 'shot'))
+  );
 
   // Ball-Garantie (Entscheidung 2026-07-17): Jede Grafik zeigt mindestens
   // einen Ball. Fehlt er in den Daten, wird er neben dem ersten Spieler

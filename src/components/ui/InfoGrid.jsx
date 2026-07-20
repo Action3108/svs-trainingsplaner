@@ -78,8 +78,11 @@ export function InfoBlock({ icon, title, text, content }) {
 /**
  * Zwei-Spalten-Raster in konsistenter Platz-Reihenfolge:
  * Material → Aufbau → Ablauf → Regeln → Coaching → leichter/schwerer.
+ *
+ * Optional `keys`: nur diese Blöcke anzeigen (z. B. in der Trainingskarte nur
+ * Material/Aufbau/Ablauf/Regeln; der Rest steht dann unter „Infos“).
  */
-export default function InfoGrid({ exercise }) {
+export default function InfoGrid({ exercise, keys = null }) {
   const e = exercise ?? {};
   const blocks = [
     {
@@ -94,7 +97,9 @@ export default function InfoGrid({ exercise }) {
     { icon: 'coaching', title: 'Coaching', text: e.coachingPoints },
     { icon: 'regression', title: 'Leichtere Variante', text: e.regression },
     { icon: 'progression', title: 'Schwierigere Variante', text: e.progression },
-  ].filter((b) => b.content || String(b.text ?? '').trim());
+  ]
+    .filter((b) => !keys || keys.includes(b.icon))
+    .filter((b) => b.content || String(b.text ?? '').trim());
 
   if (blocks.length === 0) return null;
   return (

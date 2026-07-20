@@ -427,6 +427,20 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   resize: vertical;
 }
 
+/* Icons in der Stammdaten-Zeile (Person = Spieleranzahl, Stoppuhr = Dauer) */
+.svs-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.svs-meta-icon {
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+
 /* Gut ablesbarer Fortschrittszähler (z. B. 22/134) */
 .svs-review-counter {
   display: flex;
@@ -450,6 +464,54 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   color: var(--c-gray, #a3a3a3);
   font-size: var(--fs-sm, 0.875rem);
 }
+
+/* Eigene, überall grün einfärbbare Übungsauswahl (Kontrollmodus) */
+.svs-review-picker { margin: var(--sp-3, 12px) 0; }
+.svs-review-picker__toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: var(--radius-md, 10px);
+  background: var(--c-surface, #fff);
+  font-weight: 700;
+  cursor: pointer;
+}
+.svs-review-picker__list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 6px;
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: var(--radius-md, 10px);
+  background: var(--c-surface, #fff);
+  max-height: 340px;
+  overflow: auto;
+}
+.svs-review-picker__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: var(--fs-sm, 0.875rem);
+  color: var(--c-text, #111);
+}
+.svs-review-picker__item:hover { background: var(--c-gray-soft, #ecece9); }
+.svs-review-picker__item.is-done { background: #dcfce7; }
+.svs-review-picker__item.is-done:hover { background: #bbf7d0; }
+.svs-review-picker__item.is-current { outline: 2px solid var(--c-primary, #111); outline-offset: -2px; }
+.svs-review-picker__mark { flex: none; width: 1.2em; text-align: center; font-weight: 800; }
+.svs-review-picker__label { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.svs-review-picker__status { flex: none; color: var(--c-gray-mid, #a3a3a3); font-size: 0.8em; }
 
 /* Schnell-Bewertung: zwei große Buttons */
 .svs-review-quick {
@@ -516,6 +578,11 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   font-variant-numeric: tabular-nums;
 }
 .svs-overview__text { min-width: 0; overflow-wrap: anywhere; }
+/* Übungs-Nr. dezent am Ende (Mittelgrau, nicht dominant) */
+.svs-overview__id {
+  color: var(--c-gray-mid, #a3a3a3);
+  font-variant-numeric: tabular-nums;
+}
 
 /* ---- Umbau-Hinweis zwischen zwei Übungen (2026-07-18) ---- */
 .svs-rebuild-hint {

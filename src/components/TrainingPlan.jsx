@@ -76,9 +76,12 @@ function InfoSheet({ open, phase, players, onClose }) {
       {org.oddPlayerHint && (
         <Section title="Ungerade Spielerzahl" text={org.oddPlayerHint} />
       )}
+      <Section title="Coaching" text={e.coachingPoints} />
       <Section title="Kommandos" text={e.coachingCommands} />
       <Section title="Häufige Fehler" text={e.commonMistakes} />
       <Section title="Korrekturen" text={e.corrections} />
+      <Section title="Leichtere Variante" text={e.regression} />
+      <Section title="Schwierigere Variante" text={e.progression} />
       <Section title="Übergang zur nächsten Form" text={e.transitionHints} />
       {e.videoVerified && e.videoUrl && (
         <p>
@@ -135,7 +138,7 @@ function ExchangeSheet({ open, phase, alternatives, onSelect, onClose }) {
             {sameField ? 'kein Umbau' : sameClass ? 'kleine Anpassung' : 'Umbau nötig'}
           </p>
           <div style={{ maxWidth: 320 }}>
-            <Diagram data={e.diagram?.data} altText={`Vorschau: ${e.title}`} />
+            <Diagram data={e.diagram?.data} altText={`Vorschau: ${e.title}`} phase={e.phase} />
           </div>
           {e.objective && <p>{e.objective}</p>}
           <Button block onClick={() => onSelect(e)}>
@@ -160,7 +163,7 @@ function PhaseCard({ phase, players, defaultOpen, onOpenInfo, onOpenExchange }) 
       defaultOpen={defaultOpen}
     >
       <DiagramCard
-        type={phase.label}
+        phase={phase.phase}
         data={e.diagram?.data}
         altText={e.diagram?.diagramAltText || `Übungsgrafik: ${e.title}`}
         meta={{
@@ -170,7 +173,7 @@ function PhaseCard({ phase, players, defaultOpen, onOpenInfo, onOpenExchange }) 
         }}
       />
       <Section title="Trainingsziel" text={e.objective} />
-      <InfoGrid exercise={e} />
+      <InfoGrid exercise={e} keys={['material', 'aufbau', 'ablauf', 'regeln']} />
       <p style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <Button variant="secondary" onClick={onOpenInfo}>
           Infos
@@ -243,7 +246,8 @@ export default function TrainingPlan({
           <li key={p.phase}>
             <span className="svs-overview__time">{p.duration} min</span>
             <span className="svs-overview__text">
-              {p.label}: <span className="svs-card__id">{p.exercise.id}</span> {p.exercise.title}
+              {p.label}: {p.exercise.title}{' '}
+              <span className="svs-overview__id">{p.exercise.id}</span>
             </span>
           </li>
         ))}

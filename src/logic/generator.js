@@ -1,4 +1,4 @@
-import { PHASES } from './sheetSchema.js';
+import { PHASES, effectiveAge } from './sheetSchema.js';
 
 /**
  * Trainingsgenerator: erzeugt aus der Übungsdatenbank eine vollständige
@@ -130,7 +130,7 @@ export function playerFit(e, players) {
 
 /** Harte Ausschlussregeln. Liefert null (ok) oder den Ausschlussgrund. */
 export function hardExclusion(e, { ageGroup, players }) {
-  if (!e.ageGroups?.includes(ageGroup)) return 'Altersgruppe unpassend';
+  if (!e.ageGroups?.includes(effectiveAge(ageGroup))) return 'Altersgruppe unpassend';
   const fit = playerFit(e, players);
   if (!fit.ok) return 'Spielerzahl außerhalb der Grenzen';
   if (

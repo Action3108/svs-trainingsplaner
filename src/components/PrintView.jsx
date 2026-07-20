@@ -1,4 +1,5 @@
 import Diagram from './diagram/Diagram.jsx';
+import { ageGroupLabel } from '../logic/sheetSchema.js';
 
 /**
  * Druck-/PDF-Ansicht (DIN A4): enthält die KOMPLETTE Einheit mit allen
@@ -34,7 +35,7 @@ export default function PrintView({ plan, inputs }) {
 
       <p className="svs-print__meta">
         <strong>
-          {inputs.ageGroup}-Jugend · Schwerpunkt {inputs.focus} ·{' '}
+          {ageGroupLabel(inputs.ageGroup)} · Schwerpunkt {inputs.focus} ·{' '}
           {inputs.players} Spieler · {plan.totalDuration} Minuten
         </strong>
       </p>
@@ -71,6 +72,7 @@ export default function PrintView({ plan, inputs }) {
               <Diagram
                 data={e.diagram?.data}
                 altText={e.diagram?.diagramAltText || `Übungsgrafik: ${e.title}`}
+                phase={p.phase}
               />
             </div>
             <P t="Trainingsziel" x={e.objective} />

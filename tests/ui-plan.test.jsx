@@ -84,15 +84,16 @@ describe('TrainingPlan-Komponente', () => {
   it('zeigt Kerninfos direkt und die weiteren Details erst im Infos-Sheet', () => {
     const plan = generateTraining(fallbackDb, inputs);
     const { unmount } = render(<TrainingPlan plan={plan} inputs={inputs} onVariant={() => {}} />);
-    // Kerninfos direkt auf der Karte (Informationskarten, Backlog §12):
+    // Kerninfos direkt auf der Karte: Trainingsziel, Material, Aufbau, Ablauf, Regeln
     expect(screen.getAllByText('Trainingsziel').length).toBe(6);
     expect(screen.getAllByText('Aufbau').length).toBe(6);
-    expect(screen.getAllByText('Coaching').length).toBe(6);
     expect(screen.getAllByText('Material').length).toBe(6);
-    // Weitere Details erst nach Klick auf „Infos“:
+    // Coaching und weitere Details erst nach Klick auf „Infos“:
+    expect(screen.queryByText('Coaching')).not.toBeInTheDocument();
     expect(screen.queryByText('Mannschaftseinteilung')).not.toBeInTheDocument();
     fireEvent.click(screen.getAllByRole('button', { name: /^Infos$/ })[0]);
     expect(screen.getByText('Mannschaftseinteilung')).toBeInTheDocument();
+    expect(screen.getByText('Coaching')).toBeInTheDocument();
     unmount();
   });
 

@@ -19,6 +19,23 @@ export const PHASES = [
 export const AGE_GROUPS = ['G', 'F', 'E', 'D', 'C', 'B', 'A'];
 
 /**
+ * „Senioren“ (Wert S) sind eine eigene Mannschaftskategorie, nutzen aber
+ * dieselben Übungen wie die A-Jugend. Statt jede A-Übung zusätzlich zu taggen,
+ * wird die Auswahl „S“ in der Trainingslogik auf „A“ abgebildet.
+ */
+export const AGE_GROUP_ALIASES = { S: 'A' };
+
+/** Übungs-relevante Altersgruppe (löst Aliasse wie Senioren→A auf). */
+export function effectiveAge(ageGroup) {
+  return AGE_GROUP_ALIASES[ageGroup] ?? ageGroup;
+}
+
+/** Lesbares Label für Datei-, Druck- und Teilen-Ausgaben. */
+export function ageGroupLabel(ageGroup) {
+  return ageGroup === 'S' ? 'Senioren' : `${ageGroup}-Jugend`;
+}
+
+/**
  * Die sechs erlaubten Trainingsschwerpunkte (Folge-Backlog 2026-07-17, §3).
  * Interne Werte – die UI-Labels kommen aus dem Lists-Tab.
  */
@@ -243,6 +260,14 @@ export function buildLists(rows) {
         return true;
       });
   }
+
+  // „Senioren“ als Kategorie ergänzen (nutzt dieselben Übungen wie die
+  // A-Jugend; Zuordnung über AGE_GROUP_ALIASES in der Trainingslogik).
+  if (lists.ageGroups && !lists.ageGroups.some((a) => a.value === 'S')) {
+    const maxSort = Math.max(0, ...lists.ageGroups.map((a) => a.sortOrder ?? 0));
+    lists.ageGroups.push({ value: 'S', label: 'Senioren', sortOrder: maxSort + 1 });
+  }
+
   return { lists, errors };
 }
 

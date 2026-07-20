@@ -5,6 +5,8 @@
  * der Dokumenttitel dient als Dateiname beim „Als PDF speichern“.
  */
 
+import { ageGroupLabel } from './sheetSchema.js';
+
 export function buildFileName(inputs, date = new Date()) {
   const clean = (s) =>
     String(s ?? '')
@@ -12,7 +14,7 @@ export function buildFileName(inputs, date = new Date()) {
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '');
   const iso = date.toISOString().slice(0, 10);
-  return `SVS_Training_${inputs.ageGroup}-Jugend_${clean(inputs.focus)}_${iso}`;
+  return `SVS_Training_${clean(ageGroupLabel(inputs.ageGroup))}_${clean(inputs.focus)}_${iso}`;
 }
 
 /** Öffnet den Druckdialog; der Dateiname kommt aus dem Dokumenttitel. */
@@ -35,7 +37,7 @@ export function canShare() {
 /** Teilt eine Kurzfassung der Einheit über das System-Teilen-Menü. */
 export async function shareTraining(plan, inputs) {
   const text =
-    `${inputs.ageGroup}-Jugend · ${inputs.focus} · ${inputs.players} Spieler · ${plan.totalDuration} min\n` +
+    `${ageGroupLabel(inputs.ageGroup)} · ${inputs.focus} · ${inputs.players} Spieler · ${plan.totalDuration} min\n` +
     plan.phases
       .map((p) => `${p.label}: ${p.exercise.title} (${p.duration} min)`)
       .join('\n');

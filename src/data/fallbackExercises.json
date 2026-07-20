@@ -45,6 +45,11 @@
         "value": "A",
         "label": "A-Junioren",
         "sortOrder": 7
+      },
+      {
+        "value": "S",
+        "label": "Senioren",
+        "sortOrder": 8
       }
     ],
     "durations": [

@@ -79,6 +79,28 @@ describe('DiagramCard', () => {
     expect(container.querySelectorAll('path[marker-end]')).toHaveLength(1);
   });
 
+  it('blendet in Spielformen und Abschlussspiel Pass- und Schusswege aus (Dribbling bleibt)', () => {
+    const data = {
+      players: [{ team: 'black', n: 1, x: 10, y: 10 }],
+      balls: [{ x: 12, y: 12 }],
+      arrows: [
+        { type: 'pass', from: { x: 12, y: 12 }, to: { x: 80, y: 60 } },
+        { type: 'shot', from: { x: 40, y: 40 }, to: { x: 90, y: 30 } },
+        { type: 'dribble', from: { x: 10, y: 10 }, to: { x: 50, y: 50 } },
+      ],
+    };
+    // Ohne betroffene Phase (z. B. Übungsform): alle drei Pfeile sichtbar
+    const plain = render(<Diagram data={data} altText="alle" phase="exercise" />);
+    expect(plain.container.querySelectorAll('path[marker-end]')).toHaveLength(3);
+    plain.unmount();
+    // In Spielformen und Abschlussspiel bleibt nur der Dribbelweg
+    ['game_form_1', 'game_form_2', 'final_game'].forEach((phase) => {
+      const { container, unmount } = render(<Diagram data={data} altText="spielform" phase={phase} />);
+      expect(container.querySelectorAll('path[marker-end]')).toHaveLength(1);
+      unmount();
+    });
+  });
+
   it('zeigt in der Legende keinen Laufweg-Eintrag mehr', () => {
     const d5 = exampleDiagrams[0];
     render(<DiagramCard title={d5.title} data={d5.data} altText={d5.alt} defaultLegendOpen />);

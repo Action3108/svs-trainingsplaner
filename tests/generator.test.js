@@ -51,6 +51,16 @@ describe('Harte Ausschlussregeln', () => {
     expect(hardExclusion(ex(), { ageGroup: 'E', players: 10 })).toBeNull();
   });
 
+  it('behandelt „Senioren“ (S) wie die A-Jugend – A-Übungen werden akzeptiert', () => {
+    const aOnly = ex({ ageGroups: ['A'] });
+    expect(hardExclusion(aOnly, { ageGroup: 'S', players: 10 })).toBeNull();
+    expect(hardExclusion(aOnly, { ageGroup: 'A', players: 10 })).toBeNull();
+    // Eine reine Jugendübung ohne A bleibt für Senioren ausgeschlossen
+    expect(hardExclusion(ex({ ageGroups: ['E'] }), { ageGroup: 'S', players: 10 })).toMatch(
+      /Altersgruppe/
+    );
+  });
+
   it('schließt ungerade Spielerzahl ohne hinterlegte Lösung aus', () => {
     const noSolution = ex({ oddPlayerSolution: '', restPlayersAllowed: false });
     expect(hardExclusion(noSolution, { ageGroup: 'E', players: 7 })).toMatch(/ungerade/);
