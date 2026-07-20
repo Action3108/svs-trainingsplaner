@@ -427,6 +427,71 @@ details[open] > .svs-card__summary .svs-card__chevron { transform: rotate(180deg
   resize: vertical;
 }
 
+/* Gut ablesbarer Fortschrittszähler (z. B. 22/134) */
+.svs-review-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: var(--sp-3, 12px) 0;
+  padding: var(--sp-3, 12px);
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: var(--radius-md, 10px);
+  background: var(--c-surface, #fff);
+}
+.svs-review-counter__value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--c-text, #111);
+}
+.svs-review-counter__label { font-weight: 700; }
+.svs-review-counter__sub {
+  color: var(--c-gray, #a3a3a3);
+  font-size: var(--fs-sm, 0.875rem);
+}
+
+/* Schnell-Bewertung: zwei große Buttons */
+.svs-review-quick {
+  display: flex;
+  gap: 12px;
+  margin: var(--sp-3, 12px) 0;
+}
+.svs-review-quick__btn {
+  flex: 1 1 0;
+  min-height: 52px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.svs-review-quick__btn.is-ok.is-active {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #fff;
+}
+.svs-review-quick__btn.is-error.is-active {
+  background: var(--c-danger, #dc2626);
+  border-color: var(--c-danger, #dc2626);
+  color: #fff;
+}
+
+/* Optionale Details eingeklappt halten */
+.svs-review-details {
+  margin: var(--sp-3, 12px) 0;
+  border: 1px solid var(--c-border, #e4e7ec);
+  border-radius: var(--radius-md, 10px);
+  padding: 0 var(--sp-3, 12px);
+}
+.svs-review-details > summary {
+  cursor: pointer;
+  padding: var(--sp-3, 12px) 0;
+  font-weight: 700;
+  font-size: var(--fs-sm, 0.875rem);
+}
+.svs-review-details[open] > summary {
+  border-bottom: 1px solid var(--c-border, #e4e7ec);
+  margin-bottom: var(--sp-3, 12px);
+}
+
 /* ---- Einheit im Überblick (kompakte Zusammenfassung, Folge-Backlog §2) ---- */
 .svs-overview {
   list-style: none;

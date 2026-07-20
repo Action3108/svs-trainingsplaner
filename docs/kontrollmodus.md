@@ -11,11 +11,26 @@ Stand: 2026-07-16 · Backlog §10
 - Lädt alle veröffentlichten Übungen aus dem führenden Google Sheet,
   Reihenfolge stabil aufsteigend nach Übungs-ID.
 - Pro Übung: vollständige prüfrelevante Darstellung (Stammdaten, Diagramm,
-  Informationskarten) + Prüfformular (Status, Bereich, Priorität,
-  Fehlerbeschreibung, Korrekturvorschlag, Kommentar; mehrere Befunde möglich).
-- Pflichtfelder bei „Fehler gefunden": Fehlerbeschreibung + Korrekturvorschlag.
+  Informationskarten) + schlankes Prüfformular.
+
+### Schnelle Bedienung (vereinfacht 2026-07-20)
+- **Fortschrittszähler** oben, groß ablesbar im Format `geprüft/gesamt`
+  (z. B. `22/134`) inkl. Anzahl offener Übungen.
+- **Zwei Schnell-Buttons** statt Status-Dropdown:
+  - „✓ Passt" setzt den Status auf `fehlerfrei` und springt sofort zur
+    nächsten Übung (kein weiteres Feld nötig).
+  - „✗ Fehler" öffnet ein einzelnes Pflicht-Freitextfeld
+    („Was ist zu ändern?").
+- **Details eingeklappt** (`<details>`): Bereich, Priorität,
+  Korrekturvorschlag, Kommentar und weitere Befunde sind optional und nur bei
+  Bedarf sichtbar.
+- **Dropdown-Markierung:** bereits bearbeitete Übungen (Status ≠ „Prüfung
+  offen") werden grün hinterlegt und mit „✓" markiert; offene mit „–".
+- Pflichtfeld bei „Fehler gefunden": nur noch die Fehlerbeschreibung
+  (Korrekturvorschlag ist jetzt optional).
 - Speicherung: localStorage `svs-trainingsplaner-review-v1` (getrennt von den
-  produktiven Daten; verändert niemals das Google Sheet).
+  produktiven Daten; verändert niemals das Google Sheet). Jede Eingabe wird
+  sofort automatisch gespeichert.
 - Export: Markdown-Update-Protokoll + JSON-Prüfdatensatz (Download-Buttons).
 - Import: JSON-Prüfdatensatz (Gerätewechsel); Zusammenführung nach checkedAt,
   lokale neuere Einträge werden nicht überschrieben.

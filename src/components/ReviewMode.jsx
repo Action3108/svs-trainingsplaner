@@ -195,13 +195,9 @@ export default function ReviewMode() {
 
   const validate = () => {
     if (entry.status === 'Fehler gefunden') {
-      const bad = (entry.findings ?? []).some(
-        (f) => !f.description.trim() || !f.suggestion.trim()
-      );
+      const bad = (entry.findings ?? []).some((f) => !f.description.trim());
       if (bad) {
-        setValidationError(
-          'Bei „Fehler gefunden“ sind Fehlerbeschreibung und Korrekturvorschlag Pflichtfelder.'
-        );
+        setValidationError('Bitte kurz beschreiben, was zu ändern ist.');
         return false;
       }
     }
@@ -213,6 +209,15 @@ export default function ReviewMode() {
     if (!validate()) return;
     setIndex(Math.min(Math.max(next, 0), total - 1));
     setMessage(null);
+  };
+
+  // Schnellweg „Passt“: Status setzen und sofort zur nächsten Übung – ohne
+  // Pflichtfeldprüfung, damit ein zuvor offener Fehler-Entwurf nicht blockiert.
+  const markOkAndNext = () => {
+    updateEntry({ status: 'fehlerfrei' });
+    setValidationError(null);
+    setMessage(null);
+    setIndex((i) => Math.min(i + 1, total - 1));
   };
 
   const exportProtocol = () => {
@@ -293,19 +298,27 @@ export default function ReviewMode() {
           </Button>
         </p>
 
-        <p className="svs-note svs-note--info" role="status">
-          Übung {index + 1} von {total} · geprüft: {checkedCount} · offen:{' '}
-          {total - checkedCount}
-        </p>
+        <div className="svs-review-counter" role="status" aria-live="polite">
+          <span className="svs-review-counter__value">
+            {checkedCount}/{total}
+          </span>
+          <span className="svs-review-counter__label">geprüft</span>
+          <span className="svs-review-counter__sub">
+            (offen: {total - checkedCount})
+          </span>
+        </div>
 
         <SelectField
           label="Zu Übung springen"
-          options={exercises.map((x, i) => ({
-            value: String(i),
-            label: `${x.id} · ${x.title} (${
-              state.entries[x.id]?.status ?? 'Prüfung offen'
-            })`,
-          }))}
+          options={exercises.map((x, i) => {
+            const st = state.entries[x.id]?.status ?? 'Prüfung offen';
+            const done = st !== 'Prüfung offen';
+            return {
+              value: String(i),
+              label: `${done ? '✓ ' : '– '}${x.id} · ${x.title} (${st})`,
+              style: done ? { backgroundColor: '#DCFCE7', color: '#111111' } : undefined,
+            };
+          })}
           value={String(index)}
           onChange={(ev) => goto(Number(ev.target.value))}
         />
@@ -342,90 +355,151 @@ export default function ReviewMode() {
 
         <article className="svs-card" style={{ padding: 'var(--sp-3, 12px)' }} aria-label="Prüfeingaben">
           <h3 className="svs-card__title">Prüfung</h3>
-          <SelectField
-            label="Prüfstatus"
-            options={REVIEW_STATUS.map((s) => ({ value: s, label: s }))}
-            value={entry.status}
-            onChange={(ev) =>
-              updateEntry({
-                status: ev.target.value,
-                findings: entry.findings?.length ? entry.findings : [emptyFinding()],
-              })
-            }
-          />
+          <div className="svs-review-quick">
+            <Button
+              className={`svs-review-quick__btn${
+                entry.status === 'fehlerfrei' ? ' is-active is-ok' : ''
+              }`}
+              variant="secondary"
+              onClick={markOkAndNext}
+            >
+              ✓ Passt
+            </Button>
+            <Button
+              className={`svs-review-quick__btn${
+                entry.status === 'Fehler gefunden' ? ' is-active is-error' : ''
+              }`}
+              variant="secondary"
+              onClick={() =>
+                updateEntry({
+                  status: 'Fehler gefunden',
+                  findings: entry.findings?.length ? entry.findings : [emptyFinding()],
+                })
+              }
+            >
+              ✗ Fehler
+            </Button>
+          </div>
 
-          {entry.status === 'Fehler gefunden' &&
-            (entry.findings ?? []).map((f, i) => (
-              <fieldset key={i} className="svs-review-finding">
-                <legend>Befund {i + 1}</legend>
+          {entry.status === 'Fehler gefunden' && (
+            <>
+              <div className="svs-field">
+                <label className="svs-field__label" htmlFor={`fb-${e.id}`}>
+                  Was ist zu ändern? (Pflicht)
+                </label>
+                <textarea
+                  id={`fb-${e.id}`}
+                  className="svs-field__control"
+                  rows={3}
+                  placeholder="Kurz notieren, was nicht passt …"
+                  value={(entry.findings ?? [emptyFinding()])[0].description}
+                  onChange={(ev) => updateFinding(0, { description: ev.target.value })}
+                />
+              </div>
+
+              <details className="svs-review-details">
+                <summary>Details &amp; weitere Befunde (optional)</summary>
+
                 <SelectField
                   label="Betroffener Bereich"
                   options={REVIEW_AREAS.map((a) => ({ value: a, label: a }))}
-                  value={f.area}
-                  onChange={(ev) => updateFinding(i, { area: ev.target.value })}
+                  value={(entry.findings ?? [emptyFinding()])[0].area}
+                  onChange={(ev) => updateFinding(0, { area: ev.target.value })}
                 />
                 <SelectField
                   label="Priorität"
                   options={REVIEW_PRIORITIES.map((p) => ({ value: p, label: p }))}
-                  value={f.priority}
-                  onChange={(ev) => updateFinding(i, { priority: ev.target.value })}
+                  value={(entry.findings ?? [emptyFinding()])[0].priority}
+                  onChange={(ev) => updateFinding(0, { priority: ev.target.value })}
                 />
                 <div className="svs-field">
-                  <label className="svs-field__label" htmlFor={`desc-${e.id}-${i}`}>
-                    Fehlerbeschreibung (Pflicht)
+                  <label className="svs-field__label" htmlFor={`sugg-${e.id}-0`}>
+                    Korrekturvorschlag (optional)
                   </label>
                   <textarea
-                    id={`desc-${e.id}-${i}`}
+                    id={`sugg-${e.id}-0`}
                     className="svs-field__control"
-                    rows={3}
-                    value={f.description}
-                    onChange={(ev) => updateFinding(i, { description: ev.target.value })}
+                    rows={2}
+                    value={(entry.findings ?? [emptyFinding()])[0].suggestion}
+                    onChange={(ev) => updateFinding(0, { suggestion: ev.target.value })}
                   />
                 </div>
                 <div className="svs-field">
-                  <label className="svs-field__label" htmlFor={`sugg-${e.id}-${i}`}>
-                    Korrekturvorschlag (Pflicht)
-                  </label>
-                  <textarea
-                    id={`sugg-${e.id}-${i}`}
-                    className="svs-field__control"
-                    rows={3}
-                    value={f.suggestion}
-                    onChange={(ev) => updateFinding(i, { suggestion: ev.target.value })}
-                  />
-                </div>
-                <div className="svs-field">
-                  <label className="svs-field__label" htmlFor={`comm-${e.id}-${i}`}>
+                  <label className="svs-field__label" htmlFor={`comm-${e.id}-0`}>
                     Zusatzkommentar (optional)
                   </label>
                   <textarea
-                    id={`comm-${e.id}-${i}`}
+                    id={`comm-${e.id}-0`}
                     className="svs-field__control"
                     rows={2}
-                    value={f.comment}
-                    onChange={(ev) => updateFinding(i, { comment: ev.target.value })}
+                    value={(entry.findings ?? [emptyFinding()])[0].comment}
+                    onChange={(ev) => updateFinding(0, { comment: ev.target.value })}
                   />
                 </div>
-                {(entry.findings?.length ?? 0) > 1 && (
-                  <Button
-                    variant="ghost"
-                    onClick={() =>
-                      updateEntry({ findings: entry.findings.filter((_, j) => j !== i) })
-                    }
-                  >
-                    Befund entfernen
-                  </Button>
-                )}
-              </fieldset>
-            ))}
 
-          {entry.status === 'Fehler gefunden' && (
-            <Button
-              variant="secondary"
-              onClick={() => updateEntry({ findings: [...(entry.findings ?? []), emptyFinding()] })}
-            >
-              Weiteren Befund hinzufügen
-            </Button>
+                {(entry.findings ?? []).slice(1).map((f, j) => {
+                  const i = j + 1;
+                  return (
+                    <fieldset key={i} className="svs-review-finding">
+                      <legend>Weiterer Befund {i}</legend>
+                      <SelectField
+                        label="Betroffener Bereich"
+                        options={REVIEW_AREAS.map((a) => ({ value: a, label: a }))}
+                        value={f.area}
+                        onChange={(ev) => updateFinding(i, { area: ev.target.value })}
+                      />
+                      <SelectField
+                        label="Priorität"
+                        options={REVIEW_PRIORITIES.map((p) => ({ value: p, label: p }))}
+                        value={f.priority}
+                        onChange={(ev) => updateFinding(i, { priority: ev.target.value })}
+                      />
+                      <div className="svs-field">
+                        <label className="svs-field__label" htmlFor={`desc-${e.id}-${i}`}>
+                          Fehlerbeschreibung (Pflicht)
+                        </label>
+                        <textarea
+                          id={`desc-${e.id}-${i}`}
+                          className="svs-field__control"
+                          rows={3}
+                          value={f.description}
+                          onChange={(ev) => updateFinding(i, { description: ev.target.value })}
+                        />
+                      </div>
+                      <div className="svs-field">
+                        <label className="svs-field__label" htmlFor={`sugg-${e.id}-${i}`}>
+                          Korrekturvorschlag (optional)
+                        </label>
+                        <textarea
+                          id={`sugg-${e.id}-${i}`}
+                          className="svs-field__control"
+                          rows={2}
+                          value={f.suggestion}
+                          onChange={(ev) => updateFinding(i, { suggestion: ev.target.value })}
+                        />
+                      </div>
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          updateEntry({ findings: entry.findings.filter((_, k) => k !== i) })
+                        }
+                      >
+                        Befund entfernen
+                      </Button>
+                    </fieldset>
+                  );
+                })}
+
+                <Button
+                  variant="secondary"
+                  onClick={() =>
+                    updateEntry({ findings: [...(entry.findings ?? [emptyFinding()]), emptyFinding()] })
+                  }
+                >
+                  Weiteren Befund hinzufügen
+                </Button>
+              </details>
+            </>
           )}
 
           {validationError && (

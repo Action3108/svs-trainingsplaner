@@ -97,9 +97,10 @@ describe('Kontrollmodus-Oberfläche', () => {
   it('zeigt Fortschritt und Übungen in stabiler ID-Reihenfolge (Fallback-Daten)', async () => {
     render(<ReviewMode />);
     // Ladehinweis, danach Fallback-Datenbank (6 eingebaute Übungen)
-    const progress = await screen.findByText(/Übung 1 von 6/i, {}, { timeout: 5000 });
-    expect(progress).toBeInTheDocument();
-    expect(screen.getByText(/geprüft: 0/)).toBeInTheDocument();
+    const counter = await screen.findByText(/0\/6/i, {}, { timeout: 5000 });
+    expect(counter).toBeInTheDocument();
+    expect(screen.getByText(/geprüft/)).toBeInTheDocument();
+    expect(screen.getByText(/offen: 6/)).toBeInTheDocument();
     // erste Übung nach ID-Sortierung: FB-001
     expect(screen.getAllByText(/FB-001/).length).toBeGreaterThan(0);
     // Prüfmodus verändert keine produktiven Daten – Hinweis sichtbar
